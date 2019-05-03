@@ -1,6 +1,6 @@
 <template>
   <div class="card-list">
-    <h2>Card List</h2>
+    <h2>{{ set.name }}</h2>
     <input v-model="textSearch" />
     <select v-model="color">
       <option value="">Any</option>
@@ -24,8 +24,11 @@
         Next
       </button>
     </nav>
-    <div class="card-list-container">
+    <div class="card-list-container" v-if="paginatedData.length">
       <card v-for="card in paginatedData" :key="card.uuid" :card="card"></card>
+    </div>
+    <div v-else class="card-list-container">
+      <h4>No cards found</h4>
     </div>
   </div>
 </template>
@@ -36,7 +39,7 @@ import Card from './Card.vue';
 export default {
   name: 'CardList',
   props: {
-    cards: Array,
+    // cards: Array,
     size: {
       type: Number,
       required: false,
@@ -53,12 +56,31 @@ export default {
     prevPage() {
       this.pageNumber = this.pageNumber - 1;
     },
+    fetchData() {
+      import(`../data/${this.$route.params.id}.json`)
+        .then((data) => {
+          this.set = data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.set = {};
+          this.set.cards = [];
+          this.set.name = 'Not Found';
+        });
+    },
+  },
+  watch: {
+    $route: 'fetchData',
+  },
+  created() {
+    this.fetchData();
   },
   data: () => ({
     pageNumber: 0,
     color: '',
     textSearch: '',
     type: '',
+    set: {},
   }),
   computed: {
     pageCount() {
@@ -73,7 +95,7 @@ export default {
         .slice(start, end);
     },
     filteredCards() {
-      let filtered = this.cards;
+      let filtered = this.set.cards;
       if (this.type) {
         filtered = filtered.filter(item => item.type.includes(this.type));
       }

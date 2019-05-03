@@ -1,9 +1,12 @@
 <template>
   <div id="app">
-    <h1>MTG Binder</h1>
-    <router-link to="/war">Go to WAR</router-link>
-    <router-link to="/rna">Go to RNA</router-link>
-    <router-link to="/">Go to Home</router-link>
+    <nav>
+      <ul class="menu">
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/sets/WAR">WAR</router-link></li>
+        <li><router-link to="/sets/RNA">RNA</router-link></li>
+      </ul>
+    </nav>
     <router-view></router-view>
   </div>
 </template>
@@ -19,8 +22,9 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+.menu {
+  @include menu-base;
 }
 </style>

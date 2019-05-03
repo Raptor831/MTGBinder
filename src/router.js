@@ -26,5 +26,10 @@ export default new Router({
       component: CardList,
       props: { cards: Rna.cards },
     },
+    {
+      path: '/sets/:id',
+      name: 'Sets',
+      component: CardList,
+    },
   ],
 });

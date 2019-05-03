@@ -1,20 +1,16 @@
 <template>
   <div id="app">
     <h1>MTG Binder</h1>
-    <CardList v-bind:cards="cards" />
+    <router-link to="/war">Go to WAR</router-link>
+    <router-link to="/rna">Go to RNA</router-link>
+    <router-link to="/">Go to Home</router-link>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import War from './data/WAR.json';
-import CardList from './components/CardList.vue';
-
 export default {
   name: 'app',
-  data: () => (War),
-  components: {
-    CardList,
-  },
 };
 </script>
 

@@ -2,7 +2,6 @@
   <div class="card" :class="colorIdentity">
     <div class="card-container">
       <img :src="imgsrc" alt=""/>
-      <div>{{ card.name }}</div>
     </div>
   </div>
 </template>

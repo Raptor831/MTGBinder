@@ -34,12 +34,15 @@
 </template>
 
 <script>
+import axios from 'axios';
+import Store from 'electron-store';
 import Card from './Card.vue';
+
+const store = new Store();
 
 export default {
   name: 'CardList',
   props: {
-    // cards: Array,
     size: {
       type: Number,
       required: false,
@@ -57,16 +60,21 @@ export default {
       this.pageNumber = this.pageNumber - 1;
     },
     fetchData() {
-      import(`../data/${this.$route.params.id}.json`)
-        .then((data) => {
-          this.set = data;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.set = {};
-          this.set.cards = [];
-          this.set.name = 'Not Found';
-        });
+      const fetch = store.get(`set.${this.$route.params.id}`);
+      if (fetch && fetch.cards.length) {
+        this.set = fetch;
+      } else {
+        axios.get(`https://mtgjson.com/json/${this.$route.params.id}.json`)
+          .then((response) => {
+            this.set = response.data;
+            store.set(`set.${this.$route.params.id}`, response.data);
+          }).catch((error) => {
+            console.log(error);
+            this.set = {};
+            this.set.cards = [];
+            this.set.name = 'Not Found';
+          });
+      }
     },
   },
   watch: {
@@ -96,7 +104,7 @@ export default {
     },
     filteredCards() {
       let filtered = this.set.cards;
-      if (this.type) {
+      if (this.type !== 'any' && this.type !== '') {
         filtered = filtered.filter(item => item.type.includes(this.type));
       }
       if (this.textSearch) {
@@ -118,7 +126,7 @@ export default {
   justify-content: space-between;
 }
 .card-list {
-  background-color: #666;
+  //background-color: #666;
 }
 button {
   @include button();

@@ -1,18 +1,36 @@
 <template>
   <div class="card" :class="colorIdentity">
     <div class="card-container">
-      <h3>{{ card.name }}</h3>
-      <span>{{ card.colorIdentity }}</span>
-      <p>{{ card.text }}</p>
+      <img :src="imgsrc" alt=""/>
+      <div>{{ card.name }}</div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Card',
   props: {
     card: Object,
+  },
+  data: () => ({
+    imgsrc: '',
+  }),
+  mounted() {
+    if (!this.card.imgsrc) {
+      axios.get(`https://api.scryfall.com/cards/${this.card.scryfallId}`)
+        .then((response) => {
+          this.imgsrc = response.data.image_uris.normal;
+          this.card.imgsrc = response.data.image_uris.normal;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      this.imgsrc = this.card.imgsrc;
+    }
   },
   computed: {
     colorIdentity() {
@@ -48,42 +66,18 @@ $colors: (
 );
 .card {
   width: 200px;
-  margin: 10px;
-  padding: 10px;
+  margin: 5px;
   position: relative;
-  &:before, &:after {
-    content: '';
-    width: 50%;
-    height: 100%;
-    position: absolute;
-    z-index: 1;
-    display: block;
-    top: 0;
-    background-color: #ccc;
-  }
-  &:before {
-    left: 0;
-  }
-  &:after {
-    right: 0;
-  }
-  &.color-id- {
-    @each $slug, $color in $colors {
-      &#{$slug} {
-        &:before {
-          background-color: nth($color, 1);
-        }
-        &:after {
-          background-color: nth($color, 2);
-        }
-      }
-    }
-  }
   .card-container {
     position: relative;
     z-index: 2;
-    background-color: #ccc;
+    text-align: center;
+    //background-color: #ccc;
     overflow: hidden;
+  }
+  img {
+    max-width: 100%;
+    display: block;
   }
 }
 </style>

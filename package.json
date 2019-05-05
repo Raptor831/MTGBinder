@@ -18,6 +18,7 @@
     "electron-store": "^3.2.0",
     "foundation-sites": "^6.5.3",
     "jquery": "^3.4.0",
+    "nedb": "^1.8.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6",
     "what-input": "^5.2.1"

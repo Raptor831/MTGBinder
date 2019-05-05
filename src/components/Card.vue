@@ -1,8 +1,10 @@
 <template>
   <div class="card" :class="colorIdentity">
-    <div class="card-container">
-      <img :src="imgsrc" alt=""/>
-    </div>
+    <router-link to="/card/id">
+      <div class="card-container">
+        <img :src="imgsrc" alt=""/>
+      </div>
+    </router-link>
   </div>
 </template>
 
@@ -21,8 +23,8 @@ export default {
     if (!this.card.imgsrc) {
       axios.get(`https://api.scryfall.com/cards/${this.card.scryfallId}`)
         .then((response) => {
-          this.imgsrc = response.data.image_uris.normal;
-          this.card.imgsrc = response.data.image_uris.normal;
+          this.imgsrc = response.data.image_uris.png;
+          this.card.imgsrc = response.data.image_uris.png;
         })
         .catch((error) => {
           console.log(error);

@@ -1,44 +1,47 @@
 <template>
-  <div class="card-list">
-    <h2>{{ set.name }}</h2>
-    <input v-model="textSearch" />
-    <select v-model="color">
-      <option value="">Any</option>
-      <option value="B">Black</option>
-    </select>
-    <select v-model="type">
-      <option value="">Any</option>
-      <option value="Creature">Creature</option>
-      <option value="Planeswalker">Planeswalker</option>
-    </select>
-    <nav class="pagination">
-      <button
-        :disabled="pageNumber === 0"
-        @click="prevPage">
-        Previous
-      </button>
-      <span>Page: {{ pageNumber + 1 }} of {{ pageCount }}</span>
-      <button
-        :disabled="pageNumber >= pageCount - 1"
-        @click="nextPage">
-        Next
-      </button>
-    </nav>
-    <div class="card-list-container" v-if="paginatedData.length">
-      <card v-for="card in paginatedData" :key="card.uuid" :card="card"></card>
-    </div>
-    <div v-else class="card-list-container">
-      <h4>No cards found</h4>
+  <div class="sets">
+    <div class="card-list">
+      <h2>{{ set.name }}</h2>
+      <input v-model="textSearch" />
+      <select v-model="color">
+        <option value="">Any</option>
+        <option value="B">Black</option>
+      </select>
+      <select v-model="type">
+        <option value="">Any</option>
+        <option value="Creature">Creature</option>
+        <option value="Planeswalker">Planeswalker</option>
+      </select>
+      <nav class="pagination">
+        <button
+          :disabled="pageNumber === 0"
+          @click="prevPage">
+          Previous
+        </button>
+        <span>Page: {{ pageNumber + 1 }} of {{ pageCount }}</span>
+        <button
+          :disabled="pageNumber >= pageCount - 1"
+          @click="nextPage">
+          Next
+        </button>
+      </nav>
+      <div class="card-list-container" v-if="paginatedData.length">
+        <card v-for="card in paginatedData" :key="card.uuid" :card="card"></card>
+      </div>
+      <div v-else class="card-list-container">
+        <h4>No cards found</h4>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Store from 'electron-store';
+// import Store from 'electron-store';
 import Card from './Card.vue';
 
-const store = new Store();
+
+// const store = new Store();
 
 export default {
   name: 'CardList',
@@ -48,7 +51,6 @@ export default {
       required: false,
       default: 9,
     },
-    sets: {},
   },
   components: {
     Card,
@@ -61,26 +63,40 @@ export default {
       this.pageNumber = this.pageNumber - 1;
     },
     fetchData() {
-      if (this.sets[this.$route.params.id] && this.sets[this.$route.params.id].cards.length) {
-        this.set = this.sets[this.$route.params.id];
-      } else {
-        const fetch = store.get(`sets.${this.$route.params.id}`);
-        console.log(fetch);
-        if (fetch && fetch.cards.length) {
-          this.set = fetch;
-        } else {
+      // if (this.sets[this.$route.params.id] && this.sets[this.$route.params.id].cards.length) {
+      //   this.set = this.sets[this.$route.params.id];
+      // } else {
+      //   const fetch = store.get(`sets.${this.$route.params.id}`);
+      //   console.log(fetch);
+      //   if (fetch && fetch.cards.length) {
+      //     this.set = fetch;
+      //   } else {
+      //     axios.get(`https://mtgjson.com/json/${this.$route.params.id}.json`)
+      //       .then((response) => {
+      //         this.set = response.data;
+      //         store.set(`set.${this.$route.params.id}`, response.data);
+      //       }).catch((error) => {
+      //         console.log(error);
+      //         this.set = {};
+      //         this.set.cards = [];
+      //         this.set.name = 'Not Found';
+      //       });
+      //   }
+      // }
+      this.$db.sets.count({}, (err, docs) => console.log(docs));
+      this.$db.sets.count({ code: this.$route.params.id }, (err, docs) => {
+        console.log(docs);
+        if (docs < 1) {
           axios.get(`https://mtgjson.com/json/${this.$route.params.id}.json`)
             .then((response) => {
-              this.set = response.data;
-              store.set(`set.${this.$route.params.id}`, response.data);
-            }).catch((error) => {
-              console.log(error);
-              this.set = {};
-              this.set.cards = [];
-              this.set.name = 'Not Found';
+              this.$db.sets.insert(response.data);
             });
         }
-      }
+      });
+      this.$db.sets.find({ code: this.$route.params.id }, (err, doc) => {
+        console.log(doc);
+        this.set = doc[0];
+      });
     },
   },
   watch: {

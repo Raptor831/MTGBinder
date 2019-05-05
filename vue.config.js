@@ -3,8 +3,10 @@ module.exports = {
     loaderOptions: {
       sass: {
         data: `
-          @import "~foundation-sites/scss/foundation.scss";
           @import "@/sass/_variables.scss";
+          @import "@/sass/_settings.scss";
+          @import "~foundation-sites/scss/foundation.scss";
+          @include foundation-everything;
         `
       }
     }

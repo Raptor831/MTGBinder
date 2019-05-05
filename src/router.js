@@ -1,28 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import axios from 'axios';
-import Store from 'electron-store';
 import Home from './components/Home.vue';
+import Sets from './components/Sets.vue';
+import SetsNav from './components/SetsNav.vue';
 import CardList from './components/CardList.vue';
 import MainNav from './components/MainNav.vue';
+import CardDetail from './components/CardDetail.vue';
+import Inventory from './components/Inventory.vue';
 
 Vue.use(Router);
-
-const store = new Store();
-const fetch = store.get('sets');
-let setsObject = {};
-
-if (fetch) {
-  setsObject = fetch;
-} else {
-  axios.get('https://mtgjson.com/json/AllSets.json')
-    .then((response) => {
-      setsObject = response.data;
-      store.set('sets', setsObject);
-    }).catch((error) => {
-      console.log(error);
-    });
-}
 
 export default new Router({
   routes: [
@@ -34,23 +20,30 @@ export default new Router({
     {
       path: '/sets',
       name: 'Sets List',
-      components: { default: Home, nav: MainNav },
-      props: {
-        default: { sets: setsObject },
-      },
-    },
-    {
-      path: '/sets/:id',
-      name: 'Sets',
-      components: { default: CardList, nav: MainNav },
-      props: {
-        default: { sets: setsObject },
-      },
+      components: { default: Sets, nav: MainNav },
+      children: [
+        {
+          path: '',
+          name: 'Sets Top',
+          components: { list: Home },
+        },
+        {
+          path: ':id',
+          name: 'Sets',
+          components: { list: CardList },
+          props: true,
+        },
+      ],
     },
     {
       path: '/inventory',
       name: 'Inventory',
-      components: { default: Home, nav: MainNav },
+      components: { default: Inventory, nav: MainNav },
+    },
+    {
+      path: '/card/:id',
+      name: 'Card Detail',
+      components: { default: CardDetail, nav: MainNav },
     },
   ],
 });

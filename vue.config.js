@@ -7,8 +7,8 @@ module.exports = {
           @import "@/sass/_settings.scss";
           @import "~foundation-sites/scss/foundation.scss";
           @include foundation-everything;
-        `
-      }
-    }
-  }
+        `,
+      },
+    },
+  },
 };

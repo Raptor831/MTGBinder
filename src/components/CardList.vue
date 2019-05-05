@@ -2,7 +2,7 @@
   <div class="sets">
     <div class="card-list">
       <h2>{{ set.name }}</h2>
-      <input v-model="textSearch" />
+      <input type="text" v-model="textSearch" />
       <select v-model="color">
         <option value="">Any</option>
         <option value="B">Black</option>
@@ -83,9 +83,7 @@ export default {
       //       });
       //   }
       // }
-      this.$db.sets.count({}, (err, docs) => console.log(docs));
       this.$db.sets.count({ code: this.$route.params.id }, (err, docs) => {
-        console.log(docs);
         if (docs < 1) {
           axios.get(`https://mtgjson.com/json/${this.$route.params.id}.json`)
             .then((response) => {
@@ -95,6 +93,7 @@ export default {
       });
       this.$db.sets.find({ code: this.$route.params.id }, (err, doc) => {
         console.log(doc);
+        this.pageNumber = 0;
         this.set = doc[0];
       });
     },

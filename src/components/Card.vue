@@ -1,5 +1,5 @@
 <template>
-  <div class="card" :class="colorIdentity">
+  <div class="card-single" :class="colorIdentity">
     <router-link to="/card/id">
       <div class="card-container">
         <img :src="imgsrc" alt=""/>
@@ -46,7 +46,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $colors: (
   'r': (red, red),
   'b': (black, black),
@@ -65,15 +65,15 @@ $colors: (
   'uw': (blue, white),
   'cl': (beige, beige),
 );
-.card {
-  width: 200px;
-  margin: 5px;
+.card-single {
+  //width: 200px;
+  //margin: 5px;
   position: relative;
+  background: none;
   .card-container {
     position: relative;
     z-index: 2;
     text-align: center;
-    //background-color: #ccc;
     overflow: hidden;
   }
   img {

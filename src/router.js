@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './components/Home.vue';
 import Sets from './components/Sets.vue';
-import SetsNav from './components/SetsNav.vue';
 import CardList from './components/CardList.vue';
 import MainNav from './components/MainNav.vue';
 import CardDetail from './components/CardDetail.vue';

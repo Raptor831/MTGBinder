@@ -1,6 +1,8 @@
 <template>
   <div class="sets">
-    <SetsNav></SetsNav>
+    <aside class="sidebar">
+      <SetsNav></SetsNav>
+    </aside>
     <div class="content">
       <router-view name="list" />
     </div>
@@ -18,6 +20,18 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.sets {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  flex: 1;
+  align-content: stretch;
+}
+.sidebar {
+  width: 300px;
+}
+.content {
+  flex: 1;
+}
 </style>

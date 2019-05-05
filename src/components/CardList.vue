@@ -12,14 +12,16 @@
         <option value="Creature">Creature</option>
         <option value="Planeswalker">Planeswalker</option>
       </select>
-      <nav class="pagination">
+      <nav class="">
         <button
+          type="button"
           :disabled="pageNumber === 0"
           @click="prevPage">
           Previous
         </button>
         <span>Page: {{ pageNumber + 1 }} of {{ pageCount }}</span>
         <button
+          type="button"
           :disabled="pageNumber >= pageCount - 1"
           @click="nextPage">
           Next
@@ -146,9 +148,6 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-.card-list {
-  //background-color: #666;
-}
 button {
   @include button();
   margin-bottom: 0;
@@ -157,8 +156,10 @@ button {
   }
 }
 .card-list-container {
-  display: flex;
+  display: grid;
+  max-width: 800px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 5px 5px;
   justify-content: center;
-  flex-wrap: wrap;
 }
 </style>

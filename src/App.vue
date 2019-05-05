@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <router-view name="nav"></router-view>
-    <router-view></router-view>
+    <header>
+      <router-view name="nav"></router-view>
+    </header>
+    <main>
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
@@ -15,5 +19,9 @@ export default {
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+}
+#app {
+  height: 100%;
 }
 </style>

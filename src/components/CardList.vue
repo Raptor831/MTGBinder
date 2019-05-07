@@ -65,38 +65,10 @@ export default {
       this.pageNumber = this.pageNumber - 1;
     },
     fetchData() {
-      // if (this.sets[this.$route.params.id] && this.sets[this.$route.params.id].cards.length) {
-      //   this.set = this.sets[this.$route.params.id];
-      // } else {
-      //   const fetch = store.get(`sets.${this.$route.params.id}`);
-      //   console.log(fetch);
-      //   if (fetch && fetch.cards.length) {
-      //     this.set = fetch;
-      //   } else {
-      //     axios.get(`https://mtgjson.com/json/${this.$route.params.id}.json`)
-      //       .then((response) => {
-      //         this.set = response.data;
-      //         store.set(`set.${this.$route.params.id}`, response.data);
-      //       }).catch((error) => {
-      //         console.log(error);
-      //         this.set = {};
-      //         this.set.cards = [];
-      //         this.set.name = 'Not Found';
-      //       });
-      //   }
-      // }
-      this.$db.sets.count({ code: this.$route.params.id }, (err, docs) => {
-        if (docs < 1) {
-          axios.get(`https://mtgjson.com/json/${this.$route.params.id}.json`)
-            .then((response) => {
-              this.$db.sets.insert(response.data);
-            });
-        }
-      });
-      this.$db.sets.find({ code: this.$route.params.id }, (err, doc) => {
-        console.log(doc);
-        this.pageNumber = 0;
-        this.set = doc[0];
+      console.log('fetch');
+      this.$db.cards.find({ set: this.$route.params.id.toLowerCase() }, (err, docs) => {
+        console.log(docs);
+        this.set = docs;
       });
     },
   },
@@ -126,7 +98,7 @@ export default {
         .slice(start, end);
     },
     filteredCards() {
-      let filtered = this.set.cards;
+      let filtered = this.set;
       if (this.type !== 'any' && this.type !== '') {
         filtered = filtered.filter(item => item.type.includes(this.type));
       }

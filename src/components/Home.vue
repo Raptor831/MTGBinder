@@ -19,20 +19,15 @@ export default {
   methods: {
     loadData() {
       this.loading = true;
+      let index = {};
       axios.get('https://archive.scryfall.com/json/scryfall-default-cards.json')
         .then((response) => {
-          this.$db.cards.remove({});
-          let index = Object.values(response.data);
-          console.log(index);
-          index.forEach((item) => {
-            this.$db.cards.insert(item);
-          });
-        }).finally(() => {
-          this.loading = false;
-          this.$db.sets.count({}, (err, count) => {
-            console.log(count);
-          });
+          index = Object.values(response.data);
         });
+      this.$db.cards.insert(index, (err, docs) => {
+        console.log('insert');
+        this.loading = false;
+      });
     },
   },
 };

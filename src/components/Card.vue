@@ -2,7 +2,7 @@
   <div class="card-single" :class="colorIdentity">
     <router-link to="/card/id">
       <div class="card-container">
-        <img :src="imgsrc" alt=""/>
+        <img :src="card.image_uris.png" alt=""/>
       </div>
     </router-link>
   </div>
@@ -16,27 +16,10 @@ export default {
   props: {
     card: Object,
   },
-  data: () => ({
-    imgsrc: '',
-  }),
-  mounted() {
-    if (!this.card.imgsrc) {
-      axios.get(`https://api.scryfall.com/cards/${this.card.scryfallId}`)
-        .then((response) => {
-          this.imgsrc = response.data.image_uris.png;
-          this.card.imgsrc = response.data.image_uris.png;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      this.imgsrc = this.card.imgsrc;
-    }
-  },
   computed: {
     colorIdentity() {
       let colorIdentityString = '';
-      this.card.colorIdentity.forEach((item) => {
+      this.card.colors.forEach((item) => {
         colorIdentityString += item;
       });
       colorIdentityString = colorIdentityString === '' ? 'CL' : colorIdentityString;

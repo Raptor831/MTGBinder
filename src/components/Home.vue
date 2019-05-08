@@ -9,23 +9,33 @@
 </template>
 
 <script>
+import Store from 'electron-store';
 import axios from 'axios';
+
+const store = new Store();
 
 export default {
   name: 'Home',
   data: () => ({
     loading: false,
+    reload: false,
   }),
   methods: {
     loadData() {
       this.loading = true;
-      let index = {};
       axios.get('https://archive.scryfall.com/json/scryfall-default-cards.json')
         .then((response) => {
-          index = Object.values(response.data);
+          const index = Object.values(response.data);
+          console.log(response);
+          store.delete('cards');
+          store.set('cards', index);
+          // this.loading = false;
+          this.insertData(index);
         });
-      this.$db.cards.insert(index, (err, docs) => {
-        console.log('insert');
+    },
+    insertData(docs) {
+      this.$db.cards.insert(docs, (err) => {
+        console.log(err);
         this.loading = false;
       });
     },

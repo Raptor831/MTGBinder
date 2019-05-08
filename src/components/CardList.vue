@@ -40,6 +40,7 @@
 <script>
 import axios from 'axios';
 // import Store from 'electron-store';
+import db from '../db';
 import Card from './Card.vue';
 
 
@@ -66,6 +67,7 @@ export default {
     },
     fetchData() {
       console.log('fetch');
+      this.$db.cards.count({}, (err, count) => console.log(count));
       this.$db.cards.find({ set: this.$route.params.id.toLowerCase() }, (err, docs) => {
         console.log(docs);
         this.set = docs;

@@ -46,8 +46,8 @@ export default {
           .then((response) => {
             console.log(response);
             store.delete('sets');
-            store.set('sets', response.data);
-            this.insertSets(response.data);
+            store.set('sets', response.data.data);
+            this.insertSets(response.data.data);
           });
       }
     },

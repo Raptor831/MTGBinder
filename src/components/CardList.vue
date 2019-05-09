@@ -2,15 +2,30 @@
   <div class="sets">
     <div class="card-list">
       <h2>{{ set.name }}</h2>
-      <input type="text" v-model="textSearch" />
-      <select v-model="color">
-        <option value="">Any</option>
-        <option value="B">Black</option>
-      </select>
+      <input type="text" v-model="nameSearch" />
+      <div class="color-checkboxes">
+        <span v-for="(color, key) in this.$colors">
+          <input type="checkbox"
+                 :value="key"
+                 :id="color.toLowerCase()"
+                 v-model="checkedColors" />
+          <label :for="color.toLowerCase()">{{color}}</label>
+        </span>
+        <span class="union">
+          <input type="checkbox" v-model="union" id="union" />
+          <label for="union">All?</label>
+        </span>
+      </div>
       <select v-model="type">
         <option value="">Any</option>
         <option value="Creature">Creature</option>
         <option value="Planeswalker">Planeswalker</option>
+      </select>
+      <select v-model="cmc">
+        <option value="-1">Any</option>
+        <option value="0">0</option>
+        <option v-for="n in 6" :value="n">{{n}}</option>
+        <option value="7+">7+</option>
       </select>
       <nav class="">
         <button
@@ -38,13 +53,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-// import Store from 'electron-store';
-import db from '../db';
 import Card from './Card.vue';
-
-
-// const store = new Store();
 
 export default {
   name: 'CardList',
@@ -65,13 +74,26 @@ export default {
     prevPage() {
       this.pageNumber = this.pageNumber - 1;
     },
+    setPage(num) {
+      this.pageNumber = parseInt(num, 10);
+    },
     fetchData() {
       console.log('fetch');
+      this.setPage(0);
       this.$db.cards.count({}, (err, count) => console.log(count));
       this.$db.cards.find({ set: this.$route.params.id.toLowerCase() }, (err, docs) => {
         console.log(docs);
         this.set = docs;
       });
+    },
+    compareName(a, b) {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
     },
   },
   watch: {
@@ -82,9 +104,12 @@ export default {
   },
   data: () => ({
     pageNumber: 0,
-    color: '',
+    checkedColors: [],
+    union: false,
+    nameSearch: '',
     textSearch: '',
     type: '',
+    cmc: -1,
     set: {},
   }),
   computed: {
@@ -101,15 +126,36 @@ export default {
     },
     filteredCards() {
       let filtered = this.set;
+      this.setPage(0);
       if (this.type !== 'any' && this.type !== '') {
         filtered = filtered.filter(item => item.type.includes(this.type));
       }
-      if (this.textSearch) {
-        filtered = filtered.filter(item => item.name.toLowerCase().indexOf(this.textSearch) > -1);
+      if (this.nameSearch) {
+        filtered = filtered.filter(item => item.name.toLowerCase().indexOf(this.nameSearch) > -1);
       }
-      if (this.color !== 'any' && this.color !== '') {
-        filtered = filtered.filter(item => item.colorIdentity.includes(this.color));
+      if (this.checkedColors.length) {
+        console.log(this.checkedColors.length);
+        filtered = filtered.filter((item) => {
+          let check = 0;
+          this.checkedColors.forEach((element) => {
+            if (item.color_identity.includes(element)) {
+              check += 1;
+            }
+          });
+          if (
+            this.union
+            && check === this.checkedColors.length
+            && check === item.color_identity.length
+          ) {
+            return true;
+          }
+          if (!this.union && check > 0) {
+            return true;
+          }
+          return false;
+        });
       }
+      filtered = filtered.sort(this.compareName);
       return filtered;
     },
   },

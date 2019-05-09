@@ -6,6 +6,7 @@ import CardList from './components/CardList.vue';
 import MainNav from './components/MainNav.vue';
 import CardDetail from './components/CardDetail.vue';
 import Inventory from './components/Inventory.vue';
+import SetList from './components/SetList.vue';
 
 Vue.use(Router);
 
@@ -18,13 +19,12 @@ export default new Router({
     },
     {
       path: '/sets',
-      name: 'Sets List',
       components: { default: Sets, nav: MainNav },
       children: [
         {
           path: '',
           name: 'Sets Top',
-          components: { list: Home },
+          components: { list: SetList },
         },
         {
           path: ':id',

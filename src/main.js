@@ -7,6 +7,13 @@ import db from './db';
 Vue.config.productionTip = false;
 
 Vue.prototype.$db = db;
+Vue.prototype.$colors = {
+  W: 'White',
+  U: 'Blue',
+  G: 'Green',
+  B: 'Black',
+  R: 'Red',
+};
 
 new Vue({
   router,

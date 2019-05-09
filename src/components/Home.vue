@@ -25,18 +25,31 @@ export default {
       this.loading = true;
       axios.get('https://archive.scryfall.com/json/scryfall-default-cards.json')
         .then((response) => {
-          const index = Object.values(response.data);
           console.log(response);
           store.delete('cards');
-          store.set('cards', index);
+          store.set('cards', response.data);
           // this.loading = false;
-          this.insertData(index);
+          this.insertData(response.data);
+        });
+      axios.get('https://api.scryfall.com/sets')
+        .then((response) => {
+          console.log(response);
+          store.delete('sets');
+          store.set('sets', response.data.data);
+          this.insertSets(response.data.data);
         });
     },
     insertData(docs) {
+      this.$db.cards.remove({}, { multi: true });
       this.$db.cards.insert(docs, (err) => {
         console.log(err);
         this.loading = false;
+      });
+    },
+    insertSets(docs) {
+      this.$db.sets.remove({}, { multi: true });
+      this.$db.sets.insert(docs, (err) => {
+        console.log(err);
       });
     },
   },

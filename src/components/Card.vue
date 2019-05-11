@@ -1,6 +1,6 @@
 <template>
   <div class="card-single">
-    <router-link to="/card/id">
+    <router-link :to="'/card/' + card.id">
       <div class="card-container">
         <img :src="card.image_uris.png" alt=""/>
       </div>

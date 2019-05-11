@@ -82,7 +82,7 @@ export default {
       this.setPage(0);
       this.$db.cards.count({}, (err, count) => console.log(count));
       this.$db.cards.find({ set: this.$route.params.id.toLowerCase() }, (err, docs) => {
-        console.log(docs);
+        // console.log(docs);
         this.set = docs;
       });
     },

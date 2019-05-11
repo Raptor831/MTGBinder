@@ -43,6 +43,7 @@ export default new Router({
       path: '/card/:id',
       name: 'Card Detail',
       components: { default: CardDetail, nav: MainNav },
+      props: true,
     },
   ],
 });

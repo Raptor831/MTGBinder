@@ -2,7 +2,12 @@
   <div>
     <h2>All Sets</h2>
     <ul>
-      <li v-for="set in allSets"><router-link :to="'/sets/' + set.code"><img width="30" v-bind:src="set.icon_svg_uri" style="background-color:white;"/></router-link> {{set.code.toUpperCase()}}: {{set.name}}</li>
+      <li v-for="set in allSets" :key="set.id">
+        <router-link :to="'/sets/' + set.code">
+          <img width="30" v-bind:src="set.icon_svg_uri" style="background-color:white;" alt=""/>
+        </router-link>
+        {{set.code.toUpperCase()}}: {{set.name}}
+      </li>
     </ul>
   </div>
 </template>
@@ -38,7 +43,7 @@ export default {
   computed: {
     allSets() {
       let filtered = this.sets;
-      filtered = filtered.filter((item) => item.set_type === 'core' || item.set_type === 'expansion');
+      filtered = filtered.filter(item => item.set_type === 'core' || item.set_type === 'expansion');
       filtered = filtered.sort(this.compareName);
       return filtered;
     },

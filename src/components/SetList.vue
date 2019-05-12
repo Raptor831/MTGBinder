@@ -1,14 +1,16 @@
 <template>
   <div>
     <h2>All Sets</h2>
-    <ul>
-      <li v-for="set in allSets" :key="set.id">
+    <div class="set-grid">
+      <div v-for="set in allSets" :key="set.id">
         <router-link :to="'/sets/' + set.code">
-          <img width="30" v-bind:src="set.icon_svg_uri" style="background-color:white;" alt=""/>
+          <div class="media">
+            <img v-bind:src="set.icon_svg_uri" style="background-color:white;" alt=""/>
+          </div>
           {{set.code.toUpperCase()}}: {{set.name}}
         </router-link>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -48,6 +50,14 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.set-grid {
+  display: grid;
+  max-width: 800px;
+  margin: auto;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 5px 5px;
+  justify-content: center;
+}
+.media {}
 </style>

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './components/Home.vue';
+import SidebarNav from './components/SidebarNav.vue';
 import Sets from './components/Sets.vue';
 import CardList from './components/CardList.vue';
 import MainNav from './components/MainNav.vue';
@@ -15,20 +16,20 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      components: { default: Home, nav: MainNav },
+      components: { default: Home, header: MainNav, sidebar: SidebarNav },
     },
     {
       path: '/sets',
-      components: { default: Sets, nav: MainNav },
+      components: { default: Sets, header: MainNav, sidebar: SidebarNav },
       children: [
         {
           path: '',
-          name: 'Sets Top',
+          name: 'Sets',
           components: { list: SetList },
         },
         {
           path: ':id',
-          name: 'Sets',
+          name: 'Set Detail',
           components: { list: CardList },
           props: true,
         },
@@ -37,12 +38,12 @@ export default new Router({
     {
       path: '/inventory',
       name: 'Inventory',
-      components: { default: Inventory, nav: MainNav },
+      components: { default: Inventory, header: MainNav, sidebar: SidebarNav },
     },
     {
       path: '/card/:id',
       name: 'Card Detail',
-      components: { default: CardDetail, nav: MainNav },
+      components: { default: CardDetail, header: MainNav, sidebar: SidebarNav },
       props: true,
     },
   ],

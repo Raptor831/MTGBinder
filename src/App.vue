@@ -1,10 +1,15 @@
 <template>
   <div id="app">
     <header>
-      <router-view name="nav"></router-view>
+      <router-view name="header"></router-view>
     </header>
     <main>
-      <router-view></router-view>
+      <div class="content">
+        <router-view></router-view>
+      </div>
+      <aside>
+        <router-view name="sidebar"></router-view>
+      </aside>
     </main>
   </div>
 </template>
@@ -71,7 +76,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 html, body {
   margin: 0;
   padding: 0;
@@ -79,5 +84,17 @@ html, body {
 }
 #app {
   height: 100%;
+}
+main {
+  display: flex;
+  align-items: stretch;
+}
+.content {
+  flex: 1;
+  order: 2;
+}
+aside {
+  width: 200px;
+  order: 1;
 }
 </style>

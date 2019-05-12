@@ -5,8 +5,8 @@
       <li v-for="set in allSets" :key="set.id">
         <router-link :to="'/sets/' + set.code">
           <img width="30" v-bind:src="set.icon_svg_uri" style="background-color:white;" alt=""/>
+          {{set.code.toUpperCase()}}: {{set.name}}
         </router-link>
-        {{set.code.toUpperCase()}}: {{set.name}}
       </li>
     </ul>
   </div>
@@ -23,11 +23,8 @@ export default {
   },
   methods: {
     fetchData() {
-      this.$db.cards.count({}, (err, count) => console.log(count));
-      this.$db.sets.count({}, (err, count) => console.log(count));
       this.$db.sets.find({}, (err, docs) => {
         this.sets = docs;
-        console.log(docs);
       });
     },
     compareName(a, b) {

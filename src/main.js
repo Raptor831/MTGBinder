@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import App from './App.vue';
-import '../node_modules/foundation-sites/js/foundation';
 import router from './router';
 import db from './db';
 

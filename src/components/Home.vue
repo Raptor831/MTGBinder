@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <router-view name="nav" />
     <h1>MTGBinder</h1>
     <cite>Raptor831</cite>
     <p><button @click="loadData">Load data</button></p>

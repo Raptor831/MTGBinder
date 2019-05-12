@@ -1,10 +1,11 @@
 <template>
   <nav>
-    <div class="forward-back-nav">
-      <a @click="$router.go(-1)">Back</a>
-      <a @click="$router.go(1)">Forward</a>
-      <router-link to="/">MTGBinder</router-link>
+    <div class="forward-back-nav button-group small">
+      <a class="button" @click="$router.go(-1)">Back</a>
+      <a class="button" @click="$router.go(1)">Forward</a>
     </div>
+    &nbsp;
+    <router-link class="title-link" to="/">MTGBinder</router-link>
   </nav>
 </template>
 
@@ -27,7 +28,14 @@ nav {
   position: relative;
   display: flex;
   align-items: center;
+  height: 100%;
+  padding: 10px;
 }
-.menu {
+.forward-back-nav {
+  margin-bottom: 0;
+  margin-right: 20px;
+}
+.title-link {
+  font-weight: bold;
 }
 </style>

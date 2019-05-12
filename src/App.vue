@@ -1,16 +1,14 @@
 <template>
   <div id="app">
-    <header>
+    <header class="primary-header">
       <router-view name="header"></router-view>
     </header>
     <main>
-      <div class="content">
-        <router-view></router-view>
-      </div>
-      <aside>
-        <router-view name="sidebar"></router-view>
-      </aside>
+      <router-view></router-view>
     </main>
+    <aside class="primary-aside">
+      <router-view name="sidebar"></router-view>
+    </aside>
   </div>
 </template>
 
@@ -76,25 +74,34 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
 }
 #app {
   height: 100%;
+  display: grid;
+  grid-template-rows: 50px 1fr;
+  grid-template-columns: 200px 1fr;
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+}
+header.primary-header {
+  grid-area: header;
 }
 main {
-  display: flex;
-  align-items: stretch;
+  grid-area: main;
+  max-height: calc(100vh - 50px);
+  overflow: auto;
+  padding: 10px;
 }
-.content {
-  flex: 1;
-  order: 2;
+.primary-content {
 }
-aside {
-  width: 200px;
-  order: 1;
+aside.primary-aside {
+  grid-area: sidebar;
+  background: $mana-black-secondary;
 }
 </style>

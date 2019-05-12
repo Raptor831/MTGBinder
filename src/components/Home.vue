@@ -2,7 +2,7 @@
   <div class="home">
     <h1>MTGBinder</h1>
     <cite>Raptor831</cite>
-    <p><button @click="loadData">Load data</button></p>
+    <p><button class="button" @click="loadData">Load data</button></p>
     <p v-if="loading">Loading...</p>
   </div>
 </template>

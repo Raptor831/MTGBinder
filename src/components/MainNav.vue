@@ -4,7 +4,6 @@
       <a class="button" @click="$router.go(-1)">Back</a>
       <a class="button" @click="$router.go(1)">Forward</a>
     </div>
-    &nbsp;
     <router-link class="title-link" to="/">MTGBinder</router-link>
   </nav>
 </template>

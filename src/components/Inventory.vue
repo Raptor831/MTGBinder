@@ -4,9 +4,11 @@
     <div class="card-list-container">
       <div v-for="card in cards">
         <Card :card="card"></Card>
-        {{card.name}}<span :show="card.qty > 1"> x{{card.qty}}</span>
-        <a @click="removeInventory(card.id)">-1</a>
-        <a @click="addInventory(card.id)">+1</a>
+        <div class="meta button-group expanded small">
+          <span class="qty button">Qty: {{card.qty}}</span>
+          <a class="button alert" @click="removeInventory(card.id)">-1</a>
+          <a class="button success" @click="addInventory(card.id)">+1</a>
+        </div>
       </div>
     </div>
   </div>

@@ -102,6 +102,7 @@ main {
 }
 aside.primary-aside {
   grid-area: sidebar;
-  background: $mana-black-secondary;
+  background: $base02;
+  box-shadow: rgba(0,0,0,0.5) 0 0 5px;
 }
 </style>

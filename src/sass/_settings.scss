@@ -69,23 +69,23 @@ $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $foundation-palette: (
-        primary: $mana-blue,
-        secondary: $mana-black-secondary,
-        success: #3adb76,
-        warning: #ffae00,
-        alert: #cc4b37,
+        primary: $blue,
+        secondary: $red,
+        success: $green,
+        warning: $yellow,
+        alert: $orange,
 );
-$light-gray: #e6e6e6;
-$medium-gray: #cacaca;
-$dark-gray: #8a8a8a;
-$black: #0a0a0a;
-$white: #fefefe;
+$light-gray: $base0;
+$medium-gray: $base01;
+$dark-gray: $base02;
+$black: $base03;
+$white: $base1;
 
 // Custom colors
 $primary-color: $mana-blue;
 
-$body-background: lighten($mana-black, 5%);
-$body-font-color: $mana-white;
+$body-background: $base03;
+$body-font-color: $base0;
 $body-font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
 $body-antialiased: true;
 $global-margin: 1rem;
@@ -93,7 +93,7 @@ $global-padding: 1rem;
 $global-position: 1rem;
 $global-weight-normal: normal;
 $global-weight-bold: bold;
-$global-radius: 0;
+$global-radius: 5px;
 $global-menu-padding: 0.7rem 1rem;
 $global-menu-nested-margin: 1rem;
 $global-text-direction: ltr;
@@ -138,7 +138,7 @@ $header-font-family: $body-font-family;
 $header-font-weight: $global-weight-normal;
 $header-font-style: normal;
 $font-family-monospace: Consolas, 'Liberation Mono', Courier, monospace;
-$header-color: inherit;
+$header-color: $base2;
 $header-lineheight: 1.4;
 $header-margin-bottom: 0.5rem;
 $header-styles: (
@@ -288,8 +288,8 @@ $button-margin: 0 0 $global-margin 0;
 $button-fill: solid;
 $button-background: $primary-color;
 $button-background-hover: scale-color($button-background, $lightness: -15%);
-$button-color: $white;
-$button-color-alt: $black;
+$button-color: $base2;
+$button-color-alt: $base2;
 $button-radius: $global-radius;
 $button-hollow-border-width: 1px;
 $button-sizes: (
@@ -417,29 +417,29 @@ $fieldset-padding: rem-calc(20);
 $fieldset-margin: rem-calc(18 0);
 $legend-padding: rem-calc(0 3);
 $form-spacing: rem-calc(16);
-$helptext-color: $black;
+$helptext-color: $base1;
 $helptext-font-size: rem-calc(13);
 $helptext-font-style: italic;
-$input-prefix-color: $black;
-$input-prefix-background: $light-gray;
-$input-prefix-border: 1px solid $medium-gray;
+$input-prefix-color: $base1;
+$input-prefix-background: $base01;
+$input-prefix-border: 1px solid $base02;
 $input-prefix-padding: 1rem;
-$form-label-color: $black;
+$form-label-color: $base0;
 $form-label-font-size: rem-calc(14);
 $form-label-font-weight: $global-weight-normal;
 $form-label-line-height: 1.8;
-$select-background: $white;
-$select-triangle-color: $dark-gray;
+$select-background: $base02;
+$select-triangle-color: $base1;
 $select-radius: $global-radius;
-$input-color: $black;
-$input-placeholder-color: $medium-gray;
+$input-color: $base1;
+$input-placeholder-color: $base0;
 $input-font-family: inherit;
 $input-font-size: rem-calc(16);
 $input-font-weight: $global-weight-normal;
 $input-line-height: $global-lineheight;
-$input-background: $white;
-$input-background-focus: $white;
-$input-background-disabled: $light-gray;
+$input-background: $base02;
+$input-background-focus: $base02;
+$input-background-disabled: $base01;
 $input-border: 1px solid $medium-gray;
 $input-border-focus: 1px solid $dark-gray;
 $input-padding: $form-spacing / 2;

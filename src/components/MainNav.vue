@@ -1,8 +1,8 @@
 <template>
   <nav>
     <div class="forward-back-nav button-group small">
-      <a class="button" @click="$router.go(-1)">Back</a>
-      <a class="button" @click="$router.go(1)">Forward</a>
+      <a class="button primary" @click="$router.go(-1)">Back</a>
+      <a class="button primary" @click="$router.go(1)">Forward</a>
     </div>
     <router-link class="title-link" to="/">MTGBinder</router-link>
   </nav>
@@ -22,7 +22,9 @@ export default {
 
 <style lang="scss" scoped>
 nav {
-  background-color: $white;
+  background-color: $base02;
+  border-bottom: 1px solid $black;
+  box-shadow: rgba(0,0,0,0.5) 0 0 5px;
   z-index: 5;
   position: relative;
   display: flex;

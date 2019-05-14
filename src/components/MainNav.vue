@@ -38,5 +38,7 @@ nav {
 }
 .title-link {
   font-weight: bold;
+  font-size: 1.5em;
 }
+@include mtg_button_group;
 </style>

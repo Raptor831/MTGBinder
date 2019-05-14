@@ -105,4 +105,5 @@ aside.primary-aside {
   background: $base02;
   box-shadow: rgba(0,0,0,0.5) 0 0 5px;
 }
+@include mtg_button_group;
 </style>

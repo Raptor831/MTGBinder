@@ -2,7 +2,7 @@
   <div class="inventory">
     <h3>Inventory</h3>
     <div class="card-list-container">
-      <div v-for="card in cards">
+      <div v-for="card in cards" :id="card.id">
         <Card :card="card"></Card>
         <div class="meta button-group expanded small">
           <span class="qty button">Qty: {{card.qty}}</span>
@@ -60,5 +60,14 @@ export default {
 </script>
 
 <style lang="scss">
-
+.meta.button-group {
+  margin-bottom: 0;
+}
+.card-list-container {
+  display: grid;
+  //max-width: 800px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px 10px;
+  justify-content: center;
+}
 </style>

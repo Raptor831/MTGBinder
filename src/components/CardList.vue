@@ -11,6 +11,12 @@
                  v-model="checkedColors" />
           <label :for="color.toLowerCase()">{{color}}</label>
         </span>
+        <span>
+          <input type="checkbox"
+                 id="colorless"
+                 v-model="colorless" />
+          <label for="colorless">Colorless</label>
+        </span>
         <span class="union">
           <input type="checkbox" v-model="union" id="union" />
           <label for="union">All?</label>
@@ -22,14 +28,15 @@
         <option value="Planeswalker">Planeswalker</option>
       </select>
       <select v-model="cmc">
-        <option value="-1">Any</option>
+        <option value="">Any</option>
         <option value="0">0</option>
         <option v-for="n in 6" :value="n">{{n}}</option>
         <option value="7+">7+</option>
       </select>
-      <nav class="">
+      <nav class="cards-pagination">
         <button
           type="button"
+          class="button"
           :disabled="pageNumber === 0"
           @click="prevPage">
           Previous
@@ -37,6 +44,7 @@
         <span>Page: {{ pageNumber + 1 }} of {{ pageCount }}</span>
         <button
           type="button"
+          class="button"
           :disabled="pageNumber >= pageCount - 1"
           @click="nextPage">
           Next
@@ -106,10 +114,11 @@ export default {
     pageNumber: 0,
     checkedColors: [],
     union: false,
+    colorless: false,
     nameSearch: '',
     textSearch: '',
     type: '',
-    cmc: -1,
+    cmc: '',
     set: {},
   }),
   computed: {
@@ -128,12 +137,15 @@ export default {
       let filtered = this.set;
       this.setPage(0);
       if (this.type !== 'any' && this.type !== '') {
-        filtered = filtered.filter(item => item.type.includes(this.type));
+        filtered = filtered.filter(item => item.type_line.toLowerCase().indexOf(this.type.toLowerCase()) > -1);
+      }
+      if (this.cmc !== '') {
+        filtered = filtered.filter(item => parseInt(item.cmc, 10) === parseInt(this.cmc, 10));
       }
       if (this.nameSearch) {
         filtered = filtered.filter(item => item.name.toLowerCase().indexOf(this.nameSearch) > -1);
       }
-      if (this.checkedColors.length) {
+      if (this.checkedColors.length || this.colorless) {
         console.log(this.checkedColors.length);
         filtered = filtered.filter((item) => {
           let check = 0;
@@ -142,8 +154,12 @@ export default {
               check += 1;
             }
           });
+          if (item.color_identity.length === 0 && this.colorless) {
+            check += 1;
+          }
           if (
             this.union
+            && !this.colorless
             && check === this.checkedColors.length
             && check === item.color_identity.length
           ) {
@@ -162,24 +178,26 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.pagination {
+<style lang="scss" scoped>
+nav.cards-pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
-button {
-  @include button();
+button.button {
+  @include button-base();
   margin-bottom: 0;
   &:disabled {
     @include button-disabled();
+    margin-bottom: 0;
   }
 }
 .card-list-container {
   display: grid;
-  max-width: 800px;
+  //max-width: 800px;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 5px 5px;
+  grid-gap: 10px 10px;
   justify-content: center;
 }
 </style>

@@ -2,12 +2,12 @@
   <div>
     <h2>All Sets</h2>
     <div class="set-grid">
-      <div v-for="set in allSets" :key="set.id">
+      <div class="set-single" v-for="set in allSets" :key="set.id">
         <router-link :to="'/sets/' + set.code">
           <div class="media">
-            <img v-bind:src="set.icon_svg_uri" style="background-color:white;" alt=""/>
+            <img v-bind:src="set.icon_svg_uri" :alt="set.name"/>
           </div>
-          {{set.code.toUpperCase()}}: {{set.name}}
+          <span class="set-label">{{set.name}}</span>
         </router-link>
       </div>
     </div>
@@ -42,7 +42,7 @@ export default {
   computed: {
     allSets() {
       let filtered = this.sets;
-      filtered = filtered.filter(item => item.set_type === 'core' || item.set_type === 'expansion');
+      // filtered = filtered.filter(item => item.set_type === 'core' || item.set_type === 'expansion');
       filtered = filtered.sort(this.compareName);
       return filtered;
     },
@@ -55,9 +55,32 @@ export default {
   display: grid;
   max-width: 800px;
   margin: auto;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 5px 5px;
   justify-content: center;
 }
-.media {}
+.media {
+  padding: 10px;
+  background: $mana-white;
+  display: flex;
+  justify-content: center;
+  img {
+    max-width: 100px;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+  }
+}
+.set-single {
+  background: $yellow;
+  font-weight: bold;
+  a {
+    color: $mana-black;
+  }
+}
+.set-label {
+  padding: 5px;
+  display: inline-block;
+  line-height: 1.1;
+}
 </style>

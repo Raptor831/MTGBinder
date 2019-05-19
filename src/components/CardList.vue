@@ -1,61 +1,59 @@
 <template>
-  <div class="sets">
-    <div class="card-list">
-      <h2>{{ set.name }}</h2>
-      <input type="text" v-model="nameSearch" />
-      <div class="color-checkboxes">
-        <span v-for="(color, key) in this.$colors">
-          <input type="checkbox"
-                 :value="key"
-                 :id="color.toLowerCase()"
-                 v-model="checkedColors" />
-          <label :for="color.toLowerCase()">{{color}}</label>
-        </span>
-        <span>
-          <input type="checkbox"
-                 id="colorless"
-                 v-model="colorless" />
-          <label for="colorless">Colorless</label>
-        </span>
-        <span class="union">
-          <input type="checkbox" v-model="union" id="union" />
-          <label for="union">All?</label>
-        </span>
-      </div>
-      <select v-model="type">
-        <option value="">Any</option>
-        <option value="Creature">Creature</option>
-        <option value="Planeswalker">Planeswalker</option>
-      </select>
-      <select v-model="cmc">
-        <option value="">Any</option>
-        <option value="0">0</option>
-        <option v-for="n in 6" :value="n">{{n}}</option>
-        <option value="7+">7+</option>
-      </select>
-      <nav class="cards-pagination">
-        <button
-          type="button"
-          class="button"
-          :disabled="pageNumber === 0"
-          @click="prevPage">
-          Previous
-        </button>
-        <span>Page: {{ pageNumber + 1 }} of {{ pageCount }}</span>
-        <button
-          type="button"
-          class="button"
-          :disabled="pageNumber >= pageCount - 1"
-          @click="nextPage">
-          Next
-        </button>
-      </nav>
-      <div class="card-list-container" v-if="paginatedData.length">
-        <card v-for="card in paginatedData" :key="card.uuid" :card="card"></card>
-      </div>
-      <div v-else class="card-list-container">
-        <h4>No cards found</h4>
-      </div>
+  <div class="card-list">
+    <h2>{{ set.name }}</h2>
+    <input type="text" v-model="nameSearch" />
+    <div class="color-checkboxes">
+      <span v-for="(color, key) in this.$colors">
+        <input type="checkbox"
+               :value="key"
+               :id="color.toLowerCase()"
+               v-model="checkedColors" />
+        <label :for="color.toLowerCase()">{{color}}</label>
+      </span>
+      <span>
+        <input type="checkbox"
+               id="colorless"
+               v-model="colorless" />
+        <label for="colorless">Colorless</label>
+      </span>
+      <span class="union">
+        <input type="checkbox" v-model="union" id="union" />
+        <label for="union">All?</label>
+      </span>
+    </div>
+    <select v-model="type">
+      <option value="">Any</option>
+      <option value="Creature">Creature</option>
+      <option value="Planeswalker">Planeswalker</option>
+    </select>
+    <select v-model="cmc">
+      <option value="">Any</option>
+      <option value="0">0</option>
+      <option v-for="n in 6" :value="n">{{n}}</option>
+      <option value="7+">7+</option>
+    </select>
+    <nav class="cards-pagination">
+      <button
+        type="button"
+        class="button"
+        :disabled="pageNumber === 0"
+        @click="prevPage">
+        Previous
+      </button>
+      <span>Page: {{ pageNumber + 1 }} of {{ pageCount }}</span>
+      <button
+        type="button"
+        class="button"
+        :disabled="pageNumber >= pageCount - 1"
+        @click="nextPage">
+        Next
+      </button>
+    </nav>
+    <div class="card-list-container" v-if="paginatedData.length">
+      <card v-for="card in paginatedData" :key="card.uuid" :card="card"></card>
+    </div>
+    <div v-else class="card-list-container">
+      <h4>No cards found</h4>
     </div>
   </div>
 </template>
@@ -88,10 +86,11 @@ export default {
     fetchData() {
       console.log('fetch');
       this.setPage(0);
-      this.$db.cards.count({}, (err, count) => console.log(count));
       this.$db.cards.find({ set: this.$route.params.id.toLowerCase() }, (err, docs) => {
-        // console.log(docs);
-        this.set = docs;
+        this.cards = docs;
+      });
+      this.$db.sets.findOne({ code: this.$route.params.id.toLowerCase() }, (err, doc) => {
+        this.set = doc;
       });
     },
     compareName(a, b) {
@@ -120,6 +119,7 @@ export default {
     type: '',
     cmc: '',
     set: {},
+    cards: {},
   }),
   computed: {
     pageCount() {
@@ -134,7 +134,7 @@ export default {
         .slice(start, end);
     },
     filteredCards() {
-      let filtered = this.set;
+      let filtered = this.cards;
       this.setPage(0);
       if (this.type !== 'any' && this.type !== '') {
         filtered = filtered.filter(item => item.type_line.toLowerCase().indexOf(this.type.toLowerCase()) > -1);

@@ -30,13 +30,13 @@ $green:     #859900;
 
 // MTG palette
 $base03:  darken($mana-black-secondary, 50);
-$base02:  darken($mana-black-secondary, 46);
-$base01:  darken($mana-black-secondary, 25);
-$base00:  darken($mana-black-secondary, 21);
-$base0:   darken($mana-black-secondary, 5);
-$base1:   $mana-black-secondary;
-$base2:   lighten($mana-black-secondary, 20);
-$base3:   lighten($mana-black-secondary, 25);
+$base02:  darken($mana-black-secondary, 45);
+$base01:  darken($mana-black-secondary, 35);
+$base00:  darken($mana-black-secondary, 5);
+$base0:   $mana-black-secondary;
+$base1:   lighten($mana-black-secondary, 20);
+$base2:   lighten($mana-black-secondary, 30);
+$base3:   lighten($mana-black-secondary, 35);
 $yellow:  #b58900;
 $orange:  #cb4b16;
 $red:     $mana-red;

@@ -29,7 +29,22 @@ $cyan:      #2aa198;
 $green:     #859900;
 
 // MTG palette
-$mtg-base03: scale_color($mana-black, $lightness: 4%);
+$base03:  darken($mana-black-secondary, 50);
+$base02:  darken($mana-black-secondary, 46);
+$base01:  darken($mana-black-secondary, 25);
+$base00:  darken($mana-black-secondary, 21);
+$base0:   darken($mana-black-secondary, 5);
+$base1:   $mana-black-secondary;
+$base2:   lighten($mana-black-secondary, 20);
+$base3:   lighten($mana-black-secondary, 25);
+$yellow:  #b58900;
+$orange:  #cb4b16;
+$red:     $mana-red;
+$magenta: $mana-red-light;
+$violet:  #6c71c4;
+$blue:    $mana-blue;
+$cyan:    $mana-blue-light;
+$green:   $mana-green;
 
 @mixin mtg_button_group() {
   .button-group {

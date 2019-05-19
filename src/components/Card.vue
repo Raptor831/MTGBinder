@@ -1,5 +1,5 @@
 <template>
-  <div class="card-single" :class="{ twoface: backFace }">
+  <div class="card-single" :class="{ twoface: backFace, flipped: flipState }">
     <router-link class="card-container" :to="'/card/' + card.id">
       <div class="face front">
         <img :src="frontFace" alt=""/>
@@ -8,12 +8,16 @@
         <img :src="backFace" alt=""/>
       </div>
     </router-link>
+    <button @click="flip" v-if="backFace" class="flip button secondary small">Flip</button>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Card',
+  data: () => ({
+    flipState: false,
+  }),
   props: {
     card: Object,
   },
@@ -32,6 +36,14 @@ export default {
         return false;
       }
     },
+    flipped() {
+      return this.flipState;
+    },
+  },
+  methods: {
+    flip() {
+      this.flipState = !this.flipState;
+    },
   },
 };
 </script>
@@ -44,10 +56,15 @@ export default {
     position: relative;
     z-index: 2;
     text-align: center;
-    overflow: hidden;
     display: block;
     width: 100%;
     perspective: 1000;
+  }
+  .flip {
+    position: absolute;
+    top: 30%;
+    right: 5px;
+    z-index: 5;
   }
   img {
     max-width: 100%;
@@ -68,7 +85,7 @@ export default {
       width: 100%;
     }
   }
-  &.twoface:hover .face {
+  &.twoface.flipped .face {
     transform: rotateY(-180deg);
     &.back {
       transform: rotateY(0deg);

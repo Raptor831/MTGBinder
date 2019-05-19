@@ -28,6 +28,9 @@ $blue:      #268bd2;
 $cyan:      #2aa198;
 $green:     #859900;
 
+// MTG palette
+$mtg-base03: scale_color($mana-black, $lightness: 4%);
+
 @mixin mtg_button_group() {
   .button-group {
     .button, button {

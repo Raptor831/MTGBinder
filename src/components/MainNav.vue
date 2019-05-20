@@ -4,19 +4,27 @@
       <a class="button primary" @click="$router.go(-1)">Back</a>
       <a class="button primary" @click="$router.go(1)">Forward</a>
     </div>
-    <router-link class="title-link" to="/">MTGBinder</router-link>
+    <div class="title">
+      <router-link class="title-link" to="/">MTGBinder</router-link>
+    </div>
+    <div class="utility button-group small">
+      <a class="button secondary" @click="">Save</a>
+      <a class="button secondary" @click="loadAll()">Load</a>
+    </div>
   </nav>
 </template>
 
 <script>
-// import $ from 'jquery';
-// import { DropdownMenu } from '../../node_modules/foundation-sites/js/foundation';
-
 export default {
   name: 'MainNav',
   data: () => ({
     dropdown: Object,
   }),
+  methods: {
+    loadAll() {
+      this.$emit('load-data');
+    },
+  },
 };
 </script>
 
@@ -36,9 +44,16 @@ nav {
   margin-bottom: 0;
   margin-right: 20px;
 }
-.title-link {
+.title {
   font-weight: bold;
   font-size: 1.5em;
+  flex: 1;
+}
+.utility {
+  margin: 0;
+  a {
+    display: inline-block;
+  }
 }
 @include mtg_button_group;
 </style>

@@ -78,7 +78,7 @@ export default {
     type: '',
     cmc: '',
   }),
-  created() {
+  mounted() {
     this.fetchData();
   },
   props: {

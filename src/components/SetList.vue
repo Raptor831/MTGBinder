@@ -20,7 +20,7 @@ export default {
   data: () => ({
     sets: [],
   }),
-  created() {
+  mounted() {
     this.fetchData();
   },
   methods: {

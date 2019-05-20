@@ -106,7 +106,7 @@ export default {
   watch: {
     $route: 'fetchData',
   },
-  created() {
+  mounted() {
     this.fetchData();
   },
   data: () => ({

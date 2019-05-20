@@ -41,15 +41,11 @@ export default {
   components: {
     Card,
   },
-  created() {
+  mounted() {
     console.log(this.id);
-    this.$db.cards.find({ id: this.$route.params.id }, (err, doc) => {
-      this.card = doc[0];
+    this.$db.cards.findOne({ id: this.$route.params.id }, (err, doc) => {
+      this.card = doc;
       console.log(this.card);
-      // axios.get(this.card.uri).then((response) => {
-      //   this.cardDetail = response.data;
-      //   console.log(this.cardDetail);
-      // });
     });
   },
   methods: {

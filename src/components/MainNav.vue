@@ -10,6 +10,7 @@
     <div class="utility button-group small">
       <a class="button secondary" @click="">Save</a>
       <a class="button secondary" @click="loadAll()">Load</a>
+      <a class="button secondary" @click="reloadAll()">Reload</a>
     </div>
   </nav>
 </template>
@@ -23,6 +24,9 @@ export default {
   methods: {
     loadAll() {
       this.$emit('load-data');
+    },
+    reloadAll() {
+      this.$emit('reload-data');
     },
   },
 };

@@ -42,7 +42,6 @@ export default {
     Card,
   },
   mounted() {
-    console.log(this.id);
     this.$db.cards.findOne({ id: this.$route.params.id }, (err, doc) => {
       this.card = doc;
       console.log(this.card);

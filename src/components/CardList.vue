@@ -135,6 +135,7 @@ export default {
     },
     filteredCards() {
       let filtered = this.cards;
+      if (!filtered.length) return [];
       this.setPage(0);
       if (this.type !== 'any' && this.type !== '') {
         filtered = filtered.filter(item => item.type_line.toLowerCase().indexOf(this.type.toLowerCase()) > -1);

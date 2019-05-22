@@ -50,7 +50,7 @@
       </button>
     </nav>
     <div class="card-list-container">
-      <div v-for="card in filteredCards" :id="card.id">
+      <div v-for="card in paginatedData" :id="card.id">
         <Card :card="card"></Card>
         <div class="meta button-group expanded small">
           <span class="qty button">Qty: {{card.qty}}</span>
@@ -146,8 +146,7 @@ export default {
     paginatedData() {
       const start = this.pageNumber * this.size;
       const end = start + this.size;
-      return this.filteredCards
-        .slice(start, end);
+      return this.filteredCards.slice(start, end);
     },
     filteredCards() {
       let filtered = this.cards;

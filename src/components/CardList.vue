@@ -86,12 +86,15 @@ export default {
     fetchData() {
       console.log('fetch');
       this.setPage(0);
-      this.$db.cards.find({ set: this.$route.params.id.toLowerCase() }, (err, docs) => {
-        this.cards = docs;
-      });
-      this.$db.sets.findOne({ code: this.$route.params.id.toLowerCase() }, (err, doc) => {
-        this.set = doc;
-      });
+      this.$db.cards.count().then(count => console.log(count));
+      this.$db.cards.where('set').equals(this.$route.params.id.toLowerCase()).toArray()
+        .then((cards) => {
+          this.cards = cards;
+        });
+      this.$db.sets.get({ code: this.$route.params.id.toLowerCase() })
+        .then((set) => {
+          this.set = set;
+        });
     },
     compareName(a, b) {
       if (a.name < b.name) {

@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     fetchData() {
-      this.$db.sets.find({}, (err, docs) => {
+      this.$db.sets.toArray((docs) => {
         this.sets = docs;
       });
     },

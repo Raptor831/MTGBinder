@@ -42,29 +42,25 @@ export default {
     Card,
   },
   mounted() {
-    this.$db.cards.findOne({ id: this.$route.params.id }, (err, doc) => {
-      this.card = doc;
+    this.$db.cards.get(this.$route.params.id).then((card) => {
+      this.card = card;
       console.log(this.card);
     });
   },
   methods: {
     addInventory() {
-      this.$db.inventory.find({ id: this.card.id }, (err, doc) => {
-        if (doc.length) {
-          console.log(doc);
-          const newCard = doc[0];
-          newCard.qty = parseInt(newCard.qty, 10) + parseInt(this.qty, 10);
-          this.$db.inventory.update({ id: this.card.id }, newCard, {}, (err, docs) => {
-            console.log(docs);
-          });
-        } else {
-          const newCard = this.card;
-          newCard.qty = this.qty;
-          this.$db.inventory.insert(newCard, (err, docs) => {
-            console.log(docs);
-          });
-        }
-      });
+      this.$db.inventory.get(this.card.id)
+        .then((card) => {
+          if (card) {
+            const newCard = card;
+            newCard.qty = parseInt(newCard.qty, 10) + parseInt(this.qty, 10);
+            this.$db.inventory.put(newCard);
+          } else {
+            const newCard = this.card;
+            newCard.qty = this.qty;
+            this.$db.inventory.add(newCard);
+          }
+        });
     },
   },
 };

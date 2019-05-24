@@ -94,29 +94,30 @@ export default {
   methods: {
     removeInventory(cardId) {
       // const newCard = this.cards.filter(item => item.id === cardId);
-      this.$db.inventory.findOne({ id: cardId }, (err, doc) => {
+      this.$db.inventory.get(cardId).then((doc) => {
         const newCard = doc;
         newCard.qty -= 1;
         if (newCard.qty > 0) {
-          this.$db.inventory.update({ id: cardId }, newCard, {}, () => this.fetchData());
+          this.$db.inventory.put(newCard).then(() => this.fetchData());
         } else {
-          this.$db.inventory.remove({ id: cardId }, () => this.fetchData());
+          this.$db.inventory.delete(cardId).then(() => this.fetchData());
         }
       });
     },
     addInventory(cardId) {
-      this.$db.inventory.findOne({ id: cardId }, (err, doc) => {
+      this.$db.inventory.get(cardId).then((doc) => {
         const newCard = doc;
         console.log(newCard);
         newCard.qty += 1;
-        this.$db.inventory.update({ id: cardId }, newCard, {}, () => this.fetchData());
+        this.$db.inventory.put(newCard).then(() => this.fetchData());
       });
     },
     fetchData() {
-      this.$db.inventory.find({}, (err, docs) => {
-        this.cards = docs;
-        console.log(docs);
-      });
+      this.$db.inventory.toArray()
+        .then((docs) => {
+          this.cards = docs;
+          console.log(docs);
+        });
     },
     compareName(a, b) {
       if (a.name < b.name) {

@@ -1,22 +1,16 @@
-import Datastore from 'nedb';
-import path from 'path';
-import { remote } from 'electron';
+import Dexie from 'dexie';
 
-const setsDb = new Datastore({
-  autoload: true,
-  filename: path.join(remote.app.getPath('userData'), '/sets.db'),
-});
-const cardsDb = new Datastore({
-  autoload: true,
-  filename: path.join(remote.app.getPath('userData'), '/cards.db'),
-});
-const inventoryDb = new Datastore({
-  autoload: true,
-  filename: path.join(remote.app.getPath('userData'), '/inventory.db'),
+const dexieDb = new Dexie('mtgdb');
+
+dexieDb.version(1).stores({
+  sets: '&id, name, code',
+  cards: '&id, name, set',
+  inventory: '&id, name, set',
+  decks: '++id',
 });
 
-export default {
-  sets: setsDb,
-  cards: cardsDb,
-  inventory: inventoryDb,
-};
+dexieDb.open().catch((e) => {
+  console.error(`Open failed: ${e.stack}`);
+});
+
+export default dexieDb;

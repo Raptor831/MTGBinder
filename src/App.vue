@@ -15,6 +15,7 @@
 <script>
 import Store from 'electron-store';
 import axios from 'axios';
+import Dexie from 'dexie';
 
 const store = new Store();
 
@@ -49,7 +50,7 @@ export default {
       // const setsStore = store.get('sets');
       if (store.has('sets') && !this.reloadData) {
         console.log('load sets from store');
-        this.insertSets(store.get('sets'));
+        // this.insertSets(store.get('sets'));
       } else {
         console.log('load cards from API');
         axios.get('https://api.scryfall.com/sets')
@@ -62,18 +63,35 @@ export default {
       }
     },
     insertCards(docs) {
-      this.$db.cards.remove({}, { multi: true });
-      this.$db.cards.insert(docs, (err) => {
-        console.log(err);
-        this.loadingCards = false;
-        this.$db.cards.persistence.compactDatafile();
+      // this.$db.cards.remove({}, { multi: true });
+      // this.$db.cards.insert(docs, (err) => {
+      //   console.log(err);
+      //   this.loadingCards = false;
+      //   this.$db.cards.persistence.compactDatafile();
+      // });
+
+      this.$db.transaction('rw', this.$db.cards, async () => {
+        await this.$db.cards.clear();
+        await this.$db.cards.bulkAdd(docs);
+      }).then(() => {
+        console.log('Cards transaction committed');
+      }).catch((err) => {
+        console.error(err.stack);
       });
     },
     insertSets(docs) {
-      this.$db.sets.remove({}, { multi: true });
-      this.$db.sets.insert(docs, (err) => {
-        this.loadingSets = false;
-        console.log(err);
+      // this.$db.sets.remove({}, { multi: true });
+      // this.$db.sets.insert(docs, (err) => {
+      //   this.loadingSets = false;
+      //   console.log(err);
+      // });
+      this.$db.transaction('rw', this.$db.sets, async () => {
+        await this.$db.sets.clear();
+        await this.$db.sets.bulkAdd(docs);
+      }).then(() => {
+        console.log('Sets transaction committed');
+      }).catch((err) => {
+        console.error(err.stack);
       });
     },
     loadInventory() {

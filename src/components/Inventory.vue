@@ -1,6 +1,7 @@
 <template>
   <div class="inventory">
     <h3>Inventory</h3>
+    <input type="file" ref="myFiles" v-on:change="getFilePath" />
     <input type="text" v-model="nameSearch" />
     <div class="color-checkboxes">
       <span v-for="(color, key) in this.$colors">
@@ -25,6 +26,8 @@
       <option value="">Any</option>
       <option value="Creature">Creature</option>
       <option value="Planeswalker">Planeswalker</option>
+      <option value="Sorcery">Sorcery</option>
+      <option value="Instant">Instant</option>
     </select>
     <select v-model="cmc">
       <option value="">Any</option>
@@ -63,6 +66,7 @@
 </template>
 
 <script>
+import fs from 'fs';
 import Card from './Card.vue';
 
 export default {
@@ -77,6 +81,8 @@ export default {
     textSearch: '',
     type: '',
     cmc: '',
+    cardImport: '',
+    defaultSet: 'rna',
   }),
   mounted() {
     this.fetchData();
@@ -136,6 +142,85 @@ export default {
     },
     setPage(num) {
       this.pageNumber = parseInt(num, 10);
+    },
+    getFilePath(event) {
+      // console.log(this.$refs.myFiles.files);
+      // let fileData = '';
+      console.log(event.target.files[0].path);
+      fs.readFile(event.target.files[0].path, 'utf8', (err, data) => {
+        if (err) throw err;
+        this.cardImport = data;
+        this.parseTxt();
+      });
+    },
+    parseTxt() {
+      const lines = this.cardImport.split('\n');
+      const results = [];
+      lines.forEach((line) => {
+        const result = {};
+        const lineArray = line.split(' ');
+        const { length } = lineArray;
+        let push = true;
+        if (lineArray[0] === '' && length === 1) {
+          // else if blank line
+          console.log('blank line');
+          push = false;
+        } else if (lineArray[0].includes('\\')) {
+          // else if comment line
+          console.log('comment line');
+          push = false;
+        } else if (parseInt(lineArray[length - 1], 10)) {
+          // if Arena format
+          console.log('arena');
+          // Reverse to pop the first element (i.e. qty)
+          lineArray.reverse();
+          result.qty = parseInt(lineArray.pop(), 10);
+          lineArray.reverse(); // Reverse back
+          result.collector_number = lineArray.pop(); // set number
+          // Grab the set ID
+          result.set = lineArray.pop().replace('(', '').replace(')', '').toLowerCase();
+          result.name = lineArray.join(' '); // rest is the name
+        } else if (!parseInt(lineArray[length - 1], 10) && length > 1) {
+          // else if plain text format
+          console.log('plain');
+          // Reverse to pop the first element (i.e. qty)
+          lineArray.reverse();
+          result.qty = parseInt(lineArray.pop(), 10);
+          lineArray.reverse(); // Reverse back
+          result.name = lineArray.join(' '); // rest is the name
+        }
+        if (push) {
+          results.push(result);
+        }
+      });
+      this.importInventory(results);
+    },
+    async importInventory(imports) {
+      let importedCount = 0;
+      const promises = [];
+      await imports.forEach(async (importedCardData) => {
+        // const set = importedCard.set ? importedCard.set : this.defaultSet;
+        const promise = this.$db.transaction('rw', this.$db.cards, this.$db.inventory, async () => {
+          let addition = await this.$db.cards.where('name')
+            .equals(importedCardData.name)
+            .and(item => (item.collector_number === importedCardData.collector_number))
+            .first();
+          console.log(addition);
+          let inventoryCard = await this.$db.inventory.get(addition.id);
+          addition.qty = importedCardData.qty;
+          if (inventoryCard) {
+            addition.qty += inventoryCard.qty;
+          }
+          promises.push(await this.$db.inventory.put(addition));
+          importedCount += importedCardData.qty;
+          console.log(importedCount);
+        });
+        promises.push(promise);
+      });
+      Promise.all(promises).then(() => {
+        console.log(`Imported ${importedCount} cards`);
+        this.fetchData();
+      });
     },
   },
   computed: {

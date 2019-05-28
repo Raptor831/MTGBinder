@@ -199,21 +199,30 @@ export default {
       let importedCount = 0;
       const promises = [];
       await imports.forEach(async (importedCardData) => {
-        // const set = importedCard.set ? importedCard.set : this.defaultSet;
         const promise = this.$db.transaction('rw', this.$db.cards, this.$db.inventory, async () => {
-          let addition = await this.$db.cards.where('name')
-            .equals(importedCardData.name)
-            .and(item => (item.collector_number === importedCardData.collector_number))
-            .first();
-          console.log(addition);
-          let inventoryCard = await this.$db.inventory.get(addition.id);
+          let additionCollection = await this.$db.cards.where('name').equals(importedCardData.name);
+          let addition = await additionCollection.toArray();
+          if (await addition.length > 1 && importedCardData.set) {
+            additionCollection = await additionCollection.filter(
+              item => (item.set === importedCardData.set),
+            );
+            if (await additionCollection.count()) addition = await additionCollection.toArray();
+          }
+          if (await addition.length > 1 && importedCardData.collector_number) {
+            additionCollection = await additionCollection.filter(
+              item => (item.collector_number === importedCardData.collector_number),
+            );
+            if (await additionCollection.count()) addition = await additionCollection.toArray();
+          }
+          addition = addition[0];
+          // console.log(addition);
+          const inventoryCard = await this.$db.inventory.get(addition.id);
           addition.qty = importedCardData.qty;
           if (inventoryCard) {
             addition.qty += inventoryCard.qty;
           }
           promises.push(await this.$db.inventory.put(addition));
           importedCount += importedCardData.qty;
-          console.log(importedCount);
         });
         promises.push(promise);
       });
@@ -247,7 +256,6 @@ export default {
         filtered = filtered.filter(item => item.name.toLowerCase().indexOf(this.nameSearch) > -1);
       }
       if (this.checkedColors.length || this.colorless) {
-        console.log(this.checkedColors.length);
         filtered = filtered.filter((item) => {
           let check = 0;
           this.checkedColors.forEach((element) => {

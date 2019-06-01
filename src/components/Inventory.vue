@@ -2,6 +2,11 @@
   <div class="inventory">
     <h3>Inventory</h3>
     <input type="file" ref="myFiles" v-on:change="getFilePath" />
+    <select v-model="importType">
+      <option value="arena">MTG Arena</option>
+      <option value="mtgmanager">MTGManager App</option>
+      <option value="deckbox">Deckbox CSV</option>
+    </select>
     <input type="text" v-model="nameSearch" />
     <div class="color-checkboxes">
       <span v-for="(color, key) in this.$colors" v-bind:key="key">
@@ -83,7 +88,7 @@ export default {
     type: '',
     cmc: '',
     cardImport: '',
-    defaultSet: 'rna',
+    importType: 'arena',
   }),
   mounted() {
     this.fetchData();
@@ -153,14 +158,27 @@ export default {
       fs.readFile(path, 'utf8', (err, data) => {
         if (err) throw err;
         this.cardImport = data;
+        switch (this.importType) {
+          case 'arena':
+            this.parseArenaTxt();
+            break;
+          case 'mtgmanager':
+            this.parseMtgManagerCsv();
+            break;
+          case 'deckbox':
+            this.parseDeckboxCsv();
+            break;
+          default:
+            break;
+        }
         if (path.endsWith('.txt')) {
           this.parseTxt();
         } else if (path.endsWith('.csv')) {
-          this.parseCsv();
+          this.parseMtgManagerCsv();
         }
       });
     },
-    parseTxt() {
+    parseArenaTxt() {
       const lines = this.cardImport.split('\n');
       const results = [];
       lines.forEach((line) => {
@@ -202,10 +220,31 @@ export default {
       });
       this.importInventory(results);
     },
-    parseCsv() {
-      // const results = [];
-      const parsedCsv = Papa.parse(this.cardImport);
-      console.log(parsedCsv);
+    parseMtgManagerCsv() {
+      const results = [];
+      const parsedCsv = Papa.parse(this.cardImport, { header: true });
+      console.log(parsedCsv.data);
+      parsedCsv.data.forEach((item) => {
+        const result = {};
+        result.qty = parseInt(item.Quantity, 10);
+        result.name = item.Name;
+        result.set = item.Code.toLowerCase();
+        results.push(result);
+      });
+      this.importInventory(results);
+    },
+    async parseDeckboxCsv() {
+      const results = [];
+      const parsedCsv = Papa.parse(this.cardImport, { header: true });
+      console.log(parsedCsv.data);
+      parsedCsv.data.forEach((item) => {
+        const result = {};
+        result.qty = parseInt(item.Count, 10);
+        result.name = item.Name;
+        result.set = item.Code.toLowerCase();
+        results.push(result);
+      });
+      this.importInventory(results);
     },
     async importInventory(imports) {
       let importedCount = 0;

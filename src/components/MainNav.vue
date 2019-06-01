@@ -1,16 +1,26 @@
 <template>
   <nav>
     <div class="forward-back-nav button-group small">
-      <a class="button primary" @click="$router.go(-1)">Back</a>
-      <a class="button primary" @click="$router.go(1)">Forward</a>
+      <a class="button primary" @click="$router.go(-1)" aria-label="Back">
+        <span class="fi fi-arrow-left"></span>
+      </a>
+      <a class="button primary" @click="$router.go(1)" aria-label="Forward">
+        <span class="fi fi-arrow-right"></span>
+      </a>
     </div>
     <div class="title">
       <router-link class="title-link" to="/">MTGBinder</router-link>
     </div>
     <div class="utility button-group small">
-      <a class="button secondary">Save</a>
-      <a class="button secondary" @click="loadAll()">Load</a>
-      <a class="button secondary" @click="reloadAll()">Reload</a>
+      <a class="button secondary">
+        <span class="fi fi-save"></span>
+      </a>
+      <a class="button secondary" @click="loadAll()">
+        <span class="fi fi-loop"></span>
+      </a>
+      <a class="button secondary" @click="reloadAll()" title="Download">
+        <span class="fi fi-download"></span>
+      </a>
     </div>
   </nav>
 </template>
@@ -60,4 +70,19 @@ nav {
   }
 }
 @include mtg_button_group;
+a.button {
+  display: flex;
+  align-items: center;
+  padding: 0.25em 1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  span + span {
+    margin-left: .5em;
+  }
+  span.fi {
+    font-size: 2em;
+    line-height: 1;
+    // margin-right: 5px;
+  }
+}
 </style>

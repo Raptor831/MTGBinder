@@ -13,6 +13,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@icon/foundation-icons": "^3.0.0",
     "axios": "^0.18.0",
     "core-js": "^2.6.9",
     "dexie": "^2.0.4",

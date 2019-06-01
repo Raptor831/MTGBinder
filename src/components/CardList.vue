@@ -3,7 +3,7 @@
     <h2>{{ set.name }}</h2>
     <input type="text" v-model="nameSearch" />
     <div class="color-checkboxes">
-      <span v-for="(color, key) in this.$colors">
+      <span v-for="(color, key) in this.$colors" :key="key">
         <input type="checkbox"
                :value="key"
                :id="color.toLowerCase()"
@@ -29,7 +29,7 @@
     <select v-model="cmc">
       <option value="">Any</option>
       <option value="0">0</option>
-      <option v-for="n in 6" :value="n">{{n}}</option>
+      <option v-for="n in 6" :value="n" :key="n">{{n}}</option>
       <option value="7+">7+</option>
     </select>
     <nav class="cards-pagination">
@@ -141,7 +141,9 @@ export default {
       if (!filtered.length) return [];
       this.setPage(0);
       if (this.type !== 'any' && this.type !== '') {
-        filtered = filtered.filter(item => item.type_line.toLowerCase().indexOf(this.type.toLowerCase()) > -1);
+        filtered = filtered.filter(
+          item => item.type_line.toLowerCase().indexOf(this.type.toLowerCase()) > -1,
+        );
       }
       if (this.cmc !== '') {
         filtered = filtered.filter(item => parseInt(item.cmc, 10) === parseInt(this.cmc, 10));

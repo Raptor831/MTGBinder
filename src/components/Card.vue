@@ -25,16 +25,14 @@ export default {
     frontFace() {
       if (this.card.layout === 'transform') {
         return this.card.card_faces[0].image_uris.png;
-      } else {
-        return this.card.image_uris.png;
       }
+      return this.card.image_uris.png;
     },
     backFace() {
       if (this.card.layout === 'transform') {
         return this.card.card_faces[1].image_uris.png;
-      } else {
-        return false;
       }
+      return false;
     },
     flipped() {
       return this.flipState;

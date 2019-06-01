@@ -8,7 +8,7 @@
       <router-link class="title-link" to="/">MTGBinder</router-link>
     </div>
     <div class="utility button-group small">
-      <a class="button secondary" @click="">Save</a>
+      <a class="button secondary">Save</a>
       <a class="button secondary" @click="loadAll()">Load</a>
       <a class="button secondary" @click="reloadAll()">Reload</a>
     </div>

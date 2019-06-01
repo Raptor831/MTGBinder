@@ -42,7 +42,9 @@ export default {
   computed: {
     allSets() {
       let filtered = this.sets;
-      // filtered = filtered.filter(item => item.set_type === 'core' || item.set_type === 'expansion');
+      // filtered = filtered.filter(
+      //   item => item.set_type === 'core' || item.set_type === 'expansion'
+      // );
       filtered = filtered.sort(this.compareName);
       return filtered;
     },

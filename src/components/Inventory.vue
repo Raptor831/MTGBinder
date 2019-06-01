@@ -4,7 +4,7 @@
     <input type="file" ref="myFiles" v-on:change="getFilePath" />
     <input type="text" v-model="nameSearch" />
     <div class="color-checkboxes">
-      <span v-for="(color, key) in this.$colors">
+      <span v-for="(color, key) in this.$colors" v-bind:key="key">
         <input type="checkbox"
                :value="key"
                :id="color.toLowerCase()"
@@ -32,7 +32,7 @@
     <select v-model="cmc">
       <option value="">Any</option>
       <option value="0">0</option>
-      <option v-for="n in 6" :value="n">{{n}}</option>
+      <option v-for="n in 6" :value="n" :key="n">{{n}}</option>
       <option value="7+">7+</option>
     </select>
     <nav class="cards-pagination">
@@ -53,7 +53,7 @@
       </button>
     </nav>
     <div class="card-list-container">
-      <div v-for="card in paginatedData" :id="card.id">
+      <div v-for="card in paginatedData" :id="card.id" :key="card.id">
         <Card :card="card"></Card>
         <div class="meta button-group expanded small">
           <span class="qty button">Qty: {{card.qty}}</span>
@@ -67,6 +67,7 @@
 
 <script>
 import fs from 'fs';
+import Papa from 'papaparse';
 import Card from './Card.vue';
 
 export default {
@@ -147,10 +148,16 @@ export default {
       // console.log(this.$refs.myFiles.files);
       // let fileData = '';
       console.log(event.target.files[0].path);
-      fs.readFile(event.target.files[0].path, 'utf8', (err, data) => {
+      const path = event.target.files[0].path;
+      if (!path || path === '') { return; }
+      fs.readFile(path, 'utf8', (err, data) => {
         if (err) throw err;
         this.cardImport = data;
-        this.parseTxt();
+        if (path.endsWith('.txt')) {
+          this.parseTxt();
+        } else if (path.endsWith('.csv')) {
+          this.parseCsv();
+        }
       });
     },
     parseTxt() {
@@ -195,6 +202,11 @@ export default {
       });
       this.importInventory(results);
     },
+    parseCsv() {
+      // const results = [];
+      const parsedCsv = Papa.parse(this.cardImport);
+      console.log(parsedCsv);
+    },
     async importInventory(imports) {
       let importedCount = 0;
       const promises = [];
@@ -214,7 +226,7 @@ export default {
             );
             if (await additionCollection.count()) addition = await additionCollection.toArray();
           }
-          addition = addition[0];
+          [addition] = addition;
           // console.log(addition);
           const inventoryCard = await this.$db.inventory.get(addition.id);
           addition.qty = importedCardData.qty;
@@ -247,7 +259,9 @@ export default {
       let filtered = this.cards;
       this.setPage(0);
       if (this.type !== 'any' && this.type !== '') {
-        filtered = filtered.filter(item => item.type_line.toLowerCase().indexOf(this.type.toLowerCase()) > -1);
+        filtered = filtered.filter(
+          item => item.type_line.toLowerCase().indexOf(this.type.toLowerCase()) > -1,
+        );
       }
       if (this.cmc !== '') {
         filtered = filtered.filter(item => parseInt(item.cmc, 10) === parseInt(this.cmc, 10));

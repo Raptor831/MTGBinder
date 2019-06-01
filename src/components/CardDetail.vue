@@ -18,7 +18,7 @@
       <div class="card-faces-text">
         <p v-if="card.oracle_text">{{card.oracle_text}}</p>
         <p v-if="card.flavor_text">{{card.flavor_text}}</p>
-        <div class="card-face" v-for="face in card.card_faces">
+        <div class="card-face" v-for="face in card.card_faces" :key="face.id">
           <h4>{{face.name}}</h4>
           <p>{{face.oracle_text}}</p>
         </div>

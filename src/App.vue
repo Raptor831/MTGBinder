@@ -1,7 +1,11 @@
 <template>
   <div id="app" :class="{ loading: loadingData }">
     <header class="primary-header">
-      <router-view name="header" @load-data="loadAll" @save-data="saveAll" @reload-data="reloadRemote"></router-view>
+      <router-view name="header"
+                   @load-data="loadAll"
+                   @save-data="saveAll"
+                   @reload-data="reloadRemote">
+      </router-view>
     </header>
     <main>
       <router-view></router-view>
@@ -13,10 +17,10 @@
 </template>
 
 <script>
-import Store from 'electron-store';
+// import Store from 'electron-store';
 import axios from 'axios';
 
-const store = new Store();
+// const store = new Store();
 
 export default {
   name: 'app',
@@ -28,33 +32,21 @@ export default {
   methods: {
     loadCards() {
       this.loadingCards = true;
-      this.$db.sets.count().then((count) => {
-        if (count || !this.reloadData) {
-          console.log('load cards from store');
-        } else {
-          console.log('load cards from API');
-          axios.get('https://archive.scryfall.com/json/scryfall-default-cards.json')
-            .then((response) => {
-              console.log(response);
-              this.insertCards(response.data);
-            });
-        }
-      });
+      console.log('load cards from API');
+      axios.get('https://archive.scryfall.com/json/scryfall-default-cards.json')
+        .then((response) => {
+          console.log(response);
+          this.insertCards(response.data);
+        });
     },
     loadSets() {
       this.loadingSets = true;
-      this.$db.sets.count().then((count) => {
-        if (count && !this.reloadData) {
-          console.log('load sets from store');
-        } else {
-          console.log('load cards from API');
-          axios.get('https://api.scryfall.com/sets')
-            .then((response) => {
-              console.log(response);
-              this.insertSets(response.data.data);
-            });
-        }
-      });
+      console.log('load cards from API');
+      axios.get('https://api.scryfall.com/sets')
+        .then((response) => {
+          console.log(response);
+          this.insertSets(response.data.data);
+        });
     },
     insertCards(docs) {
       this.$db.transaction('rw', this.$db.cards, async () => {
@@ -77,26 +69,10 @@ export default {
       });
     },
     loadInventory() {
-      if (store.has('inventory')) {
-        console.log('load cards from store');
-        this.insertInventory(store.get('inventory'));
-      } else {
-        console.log('load cards from API');
-        axios.get('https://archive.scryfall.com/json/scryfall-default-cards.json')
-          .then((response) => {
-            console.log(response);
-            store.delete('cards');
-            store.set('cards', response.data);
-            this.insertInventory(response.data);
-          });
-      }
+
     },
     insertInventory() {
-      this.$db.inventory.remove({}, { multi: true });
-      this.$db.inventory.insert(docs, (err) => {
-        this.loadingSets = false;
-        console.log(err);
-      });
+
     },
     saveInventory() {
 

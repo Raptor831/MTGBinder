@@ -1,41 +1,47 @@
 <template>
   <div class="card-detail">
     <aside class="sidebar">
-      <Card :card="card"></Card>
+      <card :card="card" quality="detail"></card>
+      <div class="qty">
+        <div class="field-item">
+          <label for="qty">Qty:</label>
+          <input v-model="qty" type="number" min="1" name="qty" id="qty"/>
+        </div>
+        <button class="button add-to-inventory" @click="addInventory">Add To Inventory</button>
+      </div>
     </aside>
     <div class="content">
-      <h3>{{card.name}}</h3>
-      <div class="set-link">
-        <span class="label">Set: </span>
-        <router-link :to="'/sets/' + card.set" class="tiny secondary">
-          {{card.set_name}}
-        </router-link>
-      </div>
-      <div class="qty">
-        <button class="button add-to-inventory" @click="addInventory">Add To Inventory</button>
-        Qty: <input v-model="qty" type="number" min="1"/>
-      </div>
+      <header>
+        <h2>{{card.name}}</h2>
+        <div class="set-link">
+          <span class="label">Set: </span>
+          <router-link :to="'/sets/' + card.set" class="tiny secondary">
+            {{card.set_name}}
+          </router-link>
+        </div>
+      </header>
       <div class="card-faces-text">
         <p v-if="card.oracle_text">{{card.oracle_text}}</p>
         <p v-if="card.flavor_text">{{card.flavor_text}}</p>
         <div class="card-face" v-for="face in card.card_faces" :key="face.id">
-          <h4>{{face.name}}</h4>
+          <h3>{{face.name}}</h3>
           <p>{{face.oracle_text}}</p>
+          <p class="cite">{{face.flavor_text}}</p>
         </div>
       </div>
-      <div class="meta">
+      <footer class="meta">
         <div class="legalities">
           <h4>Legalities</h4>
           <div class="legalities-container">
             <div v-for="(value, name) in card.legalities"
                  v-bind:key="name"
                  class="result"
-                 :class="{legal: value === 'legal', notlegal: value !== 'legal' }">
+                 :class="{legal: value === 'legal'}">
               {{name.toUpperCase()}}
             </div>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   </div>
 </template>
@@ -80,8 +86,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-img {
-  max-width: 300px;
+.sub-header {
+  display: flex;
+  justify-content: space-between;
 }
 .set-link {
   // display: flex;
@@ -112,29 +119,49 @@ img {
 }
 .qty {
   display: flex;
+  align-items: flex-end;
+  margin-top: 1em;
+  > * {
+    margin: 0;
+    + * {
+      margin-left: 1em;
+    }
+  }
+  label {
+    //display: inline-block;
+    margin: 0;
+    //padding-right: 0.5em;
+    //vertical-align: middle;
+  }
   input {
     width: 50px;
+    margin: 0;
+    //display: inline-block;
+    //vertical-align: middle;
   }
 }
 .legalities-container {
   display: flex;
   flex-wrap: wrap;
 }
-.legal, .notlegal {
+.result {
   text-align: center;
   color: $base3;
-  width: 200px;
+  width: 180px;
   margin: 1px;
   font-size: 0.8em;
   line-height: 1;
   padding: 0.5em;
   letter-spacing: 0.05em;
   font-weight: 500;
+  background: $red;
 }
 .legal {
   background: $green;
 }
-.notlegal {
-  background: $red;
+.cite {
+  color: $base00;
+  font-style: italic;
+  font-size: 0.9em;
 }
 </style>

@@ -31,8 +31,11 @@
       <option value="">Any</option>
       <option value="Creature">Creature</option>
       <option value="Planeswalker">Planeswalker</option>
-      <option value="Sorcery">Sorcery</option>
+      <option value="Enchantment">Enchantment</option>
       <option value="Instant">Instant</option>
+      <option value="Sorcery">Sorcery</option>
+      <option value="Artifact">Artifact</option>
+      <option value="Land">Land</option>
     </select>
     <select v-model="cmc">
       <option value="">Any</option>

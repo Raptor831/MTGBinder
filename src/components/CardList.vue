@@ -1,37 +1,63 @@
 <template>
   <div class="card-list">
     <h2>{{ set.name }}</h2>
-    <input type="text" v-model="nameSearch" />
-    <div class="color-checkboxes">
-      <span v-for="(color, key) in this.$colors" :key="key">
-        <input type="checkbox"
-               :value="key"
-               :id="color.toLowerCase()"
-               v-model="checkedColors" />
-        <label :for="color.toLowerCase()">{{color}}</label>
-      </span>
-      <span>
-        <input type="checkbox"
-               id="colorless"
-               v-model="colorless" />
-        <label for="colorless">Colorless</label>
-      </span>
-      <span class="union">
-        <input type="checkbox" v-model="union" id="union" />
-        <label for="union">All?</label>
-      </span>
+    <div class="filters">
+      <input type="text"
+             v-model="nameSearch"
+             placeholder="Filter name" />
+      <div class="color-checkboxes">
+        <div v-for="(color, key) in this.$colors" :key="key">
+          <span :class="'icon icon-' + color.toLowerCase()"></span>
+          <div class="switch small">
+            <input type="checkbox"
+                   :value="key"
+                   :id="color.toLowerCase()"
+                   v-model="checkedColors"
+                   class="switch-input" />
+            <label class="switch-paddle" :for="color.toLowerCase()">
+              {{color}}
+            </label>
+          </div>
+        </div>
+        <span>
+          <input type="checkbox"
+                 id="colorless"
+                 v-model="colorless" />
+          <label for="colorless">
+            <span class="icon icon-colorless"></span> Colorless
+          </label>
+        </span>
+        <span class="union">
+          <input type="checkbox" v-model="union" id="union" />
+          <label for="union">All?</label>
+        </span>
+      </div>
+      <div class="type-filters">
+        <select v-model="type">
+          <option value="">Any</option>
+          <option value="Creature">Creature</option>
+          <option value="Planeswalker">Planeswalker</option>
+          <option value="Enchantment">Enchantment</option>
+          <option value="Instant">Instant</option>
+          <option value="Sorcery">Sorcery</option>
+          <option value="Artifact">Artifact</option>
+          <option value="Land">Land</option>
+        </select>
+        <select v-model="subtype">
+          <option value="">Any</option>
+        </select>
+        <span>
+          <input type="checkbox" v-model="legendary" id="legendary"/>
+          <label for="legendary">Legendary?</label>
+        </span>
+        <select v-model="cmc">
+          <option value="">Any</option>
+          <option value="0">0</option>
+          <option v-for="n in 6" :value="n" :key="n">{{n}}</option>
+          <option value="7+">7+</option>
+        </select>
+      </div>
     </div>
-    <select v-model="type">
-      <option value="">Any</option>
-      <option value="Creature">Creature</option>
-      <option value="Planeswalker">Planeswalker</option>
-    </select>
-    <select v-model="cmc">
-      <option value="">Any</option>
-      <option value="0">0</option>
-      <option v-for="n in 6" :value="n" :key="n">{{n}}</option>
-      <option value="7+">7+</option>
-    </select>
     <nav class="cards-pagination">
       <button
         type="button"
@@ -50,7 +76,7 @@
       </button>
     </nav>
     <div class="card-list-container" v-if="paginatedData.length">
-      <card v-for="card in paginatedData" :key="card.uuid" :card="card"></card>
+      <card v-for="card in paginatedData" :key="card.uuid" :card="card" quality="list"></card>
     </div>
     <div v-else class="card-list-container">
       <h4>No cards found</h4>
@@ -84,9 +110,7 @@ export default {
       this.pageNumber = parseInt(num, 10);
     },
     fetchData() {
-      console.log('fetch');
       this.setPage(0);
-      this.$db.cards.count().then(count => console.log(count));
       this.$db.cards.where('set').equals(this.$route.params.id.toLowerCase()).toArray()
         .then((cards) => {
           this.cards = cards;
@@ -120,6 +144,8 @@ export default {
     nameSearch: '',
     textSearch: '',
     type: '',
+    subtype: '',
+    legendary: false,
     cmc: '',
     set: {},
     cards: {},
@@ -205,5 +231,37 @@ button.button {
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 10px 10px;
   justify-content: center;
+}
+.type-filters {
+  display: flex;
+}
+.color-checkboxes {
+  margin-bottom: 1em;
+  input {
+    margin-bottom: 0;
+  }
+}
+.icon {
+  font-size: 1.5em;
+  @extend .ms;
+  @extend .ms-cost;
+  &-white {
+    @extend .ms-w;
+  }
+  &-blue {
+    @extend .ms-u;
+  }
+  &-black {
+    @extend .ms-b;
+  }
+  &-red {
+    @extend .ms-r;
+  }
+  &-green {
+    @extend .ms-g;
+  }
+  &-colorless {
+    @extend .ms-c;
+  }
 }
 </style>

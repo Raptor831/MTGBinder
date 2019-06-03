@@ -21,6 +21,7 @@
     "electron-store": "^3.2.0",
     "foundation-sites": "^6.5.3",
     "jquery": "^3.4.1",
+    "mana-font": "^1.4.1",
     "papaparse": "^5.0.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6",

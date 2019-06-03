@@ -8,7 +8,7 @@
         <img :src="backFace" alt=""/>
       </div>
     </router-link>
-    <button @click="flip" v-if="backFace" class="flip button secondary small">Flip</button>
+    <button @click="flip" v-if="backFace" class="flip button secondary"><span class="fi fi-loop"></span></button>
   </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
   }),
   props: {
     card: Object,
+    quality: {
+      type: String,
+      required: false,
+      default: 'list',
+    },
   },
   computed: {
     frontFace() {
@@ -58,11 +63,26 @@ export default {
     width: 100%;
     perspective: 1000;
   }
-  .flip {
+  .button.flip {
     position: absolute;
     top: 30%;
     right: 5px;
     z-index: 5;
+    font-size: 2em;
+    padding: 0;
+    height: 2em;
+    width: 2em;
+    display: flex;
+    justify-content: center;
+    opacity: 0.5;
+    transition: all 0.2s;
+    outline: none;
+    border-width: 2px;
+    border-radius: 1em;
+    &:hover {
+      opacity: 1;
+      // background-color: $mana-red;
+    }
   }
   img {
     max-width: 100%;

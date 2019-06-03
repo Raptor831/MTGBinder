@@ -16,7 +16,7 @@
         <span class="fi fi-save"></span>
       </a>
       <a class="button secondary" @click="loadAll()">
-        <span class="fi fi-loop"></span>
+        <span class="fi fi-refresh"></span>
       </a>
       <a class="button secondary" @click="reloadAll()" title="Download">
         <span class="fi fi-download"></span>

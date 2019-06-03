@@ -5,33 +5,38 @@
       <input type="text"
              v-model="nameSearch"
              placeholder="Filter name" />
-      <div class="color-checkboxes">
-        <div v-for="(color, key) in this.$colors" :key="key">
-          <span :class="'icon icon-' + color.toLowerCase()"></span>
-          <div class="switch small">
+      <fieldset class="color-checkboxes fieldset">
+        <legend>Filter color</legend>
+        <div class="checkbox-wrapper">
+          <span class="checkbox" v-for="(color, key) in this.$colors" :key="key">
             <input type="checkbox"
                    :value="key"
                    :id="color.toLowerCase()"
-                   v-model="checkedColors"
-                   class="switch-input" />
-            <label class="switch-paddle" :for="color.toLowerCase()">
-              {{color}}
+                   v-model="checkedColors" />
+            <label class="" :for="color.toLowerCase()">
+              <span class="ms ms-cost ms-shadow ms-2x"
+                    :class="'icon-' + color.toLowerCase()">
+              </span>
             </label>
-          </div>
+          </span>
+          <span class="checkbox">
+            <input type="checkbox"
+                   id="colorless"
+                   v-model="colorless" />
+            <label for="colorless">
+              <span class="ms ms-cost ms-shadow ms-2x ms-c"></span>
+            </label>
+          </span>
+          <span class="switch checkbox">
+            <input class="switch-input" id="union" v-model="union" type="checkbox" name="union">
+            <label class="switch-paddle" for="union">
+              <span class="show-for-sr">All or Any</span>
+              <span class="switch-active" aria-hidden="true">All</span>
+              <span class="switch-inactive" aria-hidden="true">Any</span>
+            </label>
+          </span>
         </div>
-        <span>
-          <input type="checkbox"
-                 id="colorless"
-                 v-model="colorless" />
-          <label for="colorless">
-            <span class="icon icon-colorless"></span> Colorless
-          </label>
-        </span>
-        <span class="union">
-          <input type="checkbox" v-model="union" id="union" />
-          <label for="union">All?</label>
-        </span>
-      </div>
+      </fieldset>
       <div class="type-filters">
         <select v-model="type">
           <option value="">Any</option>
@@ -237,14 +242,46 @@ button.button {
 }
 .color-checkboxes {
   margin-bottom: 1em;
-  input {
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .checkbox {
+    display: inline-block;
+    vertical-align: middle;
+    + .checkbox {
+      margin-left: 5px;
+      &.switch {
+        margin-left: 10px;
+      }
+    }
+    input {
+      margin-bottom: 0;
+      display: none;
+    }
+    label {
+      margin: 0;
+      transition: all 50ms;
+      padding: 0.5em;
+      border-radius: 50%;
+    }
+    &:not(.switch) :checked ~ label {
+      background: $primary-color;
+      color: $base3;
+    }
+  }
+  .switch {
     margin-bottom: 0;
+    label {
+      border-radius: 5px;
+    }
+    .switch-inactive {
+      right: 8%;
+    }
   }
 }
 .icon {
-  font-size: 1.5em;
-  @extend .ms;
-  @extend .ms-cost;
   &-white {
     @extend .ms-w;
   }
@@ -259,9 +296,6 @@ button.button {
   }
   &-green {
     @extend .ms-g;
-  }
-  &-colorless {
-    @extend .ms-c;
   }
 }
 </style>

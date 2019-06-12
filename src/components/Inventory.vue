@@ -1,6 +1,6 @@
 <template>
   <div class="inventory">
-    <h3>Inventory</h3>
+    <h2>Inventory</h2>
     <input type="file" ref="myFiles" v-on:change="getFilePath" />
     <select v-model="importType">
       <option value="arena">MTG Arena</option>

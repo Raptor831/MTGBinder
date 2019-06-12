@@ -4,7 +4,7 @@
       <li><router-link to="/sets">Sets</router-link></li>
       <li><router-link to="/inventory">Cards</router-link></li>
       <li><router-link to="/inventory">Inventory</router-link></li>
-      <li><router-link to="/inventory">Decks</router-link></li>
+      <li><router-link to="/decks">Decks</router-link></li>
     </ul>
   </nav>
 </template>

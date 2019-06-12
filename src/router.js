@@ -8,6 +8,7 @@ import MainNav from './components/MainNav.vue';
 import CardDetail from './components/CardDetail.vue';
 import Inventory from './components/Inventory.vue';
 import SetList from './components/SetList.vue';
+import DeckList from './components/DeckList.vue';
 
 Vue.use(Router);
 
@@ -45,6 +46,11 @@ export default new Router({
       name: 'Card Detail',
       components: { default: CardDetail, header: MainNav, sidebar: SidebarNav },
       props: true,
+    },
+    {
+      path: '/decks',
+      name: 'Decks',
+      components: { default: DeckList, header: MainNav, sidebar: SidebarNav },
     },
   ],
 });

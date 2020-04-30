@@ -20,7 +20,7 @@
     "electron": "^5.0.11",
     "electron-store": "^3.3.0",
     "foundation-sites": "^6.5.3",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "mana-font": "^1.4.1",
     "papaparse": "^5.1.0",
     "vue": "^2.6.10",

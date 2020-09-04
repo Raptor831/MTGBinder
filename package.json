@@ -22,7 +22,7 @@
     "foundation-sites": "^6.5.3",
     "jquery": "^3.4.1",
     "mana-font": "^1.4.1",
-    "papaparse": "^5.1.0",
+    "papaparse": "^5.2.0",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",
     "what-input": "^5.2.6"
